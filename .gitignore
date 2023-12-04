@@ -1,0 +1,4 @@
+node_modules/
+build/*
+weaviate_data
+.env

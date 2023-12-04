@@ -1,0 +1,41 @@
+{
+  "name": "multi2vec-node",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "compile-ts": "npx tsc",
+    "start:dev": "npx nodemon",
+    "build": "rimraf ./build && tsc",
+    "start": "npm run build && node build/index.js",
+    "lab": "npm run build && node build/lab.js",
+    "generative-search/openai": "npm run build && node build/generative-search/generative-search-openai.js",
+    "generative-search/cohere": "npm run build && node build/generative-search/generative-search-cohere.js",
+    "generative-search/palm": "npm run build && node build/generative-search/generative-search-palm.js",
+    "conditional-filters/contains-all-any": "npm run build && node build/conditional-filters/contains-all-any.js",
+    "classification/zeroshot": "npm run build && node build/classification/zero-shot/example.js",
+    "classification/knn": "npm run build && node build/classification/knn/example.js",
+    "data-with-vectors": "npm run build && node build/data-with-vectors/example.js",
+    "multi-tenancy/example": "npm run build && node build/multi-tenancy/example.js",
+    "similarity-search/openai": "npm run build && node build/similarity-search/similarity-search-openai.js",
+    "similarity-search/cohere": "npm run build && node build/similarity-search/similarity-search-cohere.js",
+    "similarity-search/hugging-face": "npm run build && node build/similarity-search/similarity-search-hugging-face.js",
+    "similarity-search/palm": "npm run build && node build/similarity-search/similarity-search-palm.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^20.5.7",
+    "nodemon": "^3.0.1",
+    "rimraf": "^5.0.1",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.2.2"
+  },
+  "dependencies": {
+    "axios": "^1.5.0",
+    "dotenv": "^16.3.1",
+    "graphql": "^16.8.1",
+    "weaviate-ts-client": "^1.5.0"
+  }
+}

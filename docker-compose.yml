@@ -1,0 +1,42 @@
+---
+version: '3.4'
+services:
+  weaviate:
+    command:
+    - --host
+    - 0.0.0.0
+    - --port
+    - '8080'
+    - --scheme
+    - http
+    image: semitechnologies/weaviate:1.22.4
+    ports:
+    - 8080:8080
+    volumes:
+    - ./weaviate_data:/var/lib/weaviate
+    restart: on-failure:0
+    environment:
+      OPENAI_APIKEY: $OPENAI_API_KEY
+      COHERE_APIKEY: $COHERE_API_KEY
+      PALM_APIKEY: $PALM_API_KEY
+      QUERY_DEFAULTS_LIMIT: 25
+      AUTHENTICATION_ANONYMOUS_ACCESS_ENABLED: 'true'
+      PERSISTENCE_DATA_PATH: '/var/lib/weaviate'
+      DEFAULT_VECTORIZER_MODULE: 'text2vec-openai'
+      ENABLE_MODULES: 'text2vec-openai,text2vec-cohere,generative-openai,generative-cohere,text2vec-transformers'
+      TRANSFORMERS_INFERENCE_API: http://t2v-transformers:8080
+      CLUSTER_HOSTNAME: 'node1'
+      # Enables API key authentication.
+      AUTHENTICATION_APIKEY_ENABLED: 'true'
+      # List one or more keys, separated by commas. Each key corresponds to a specific user identity below.
+      AUTHENTICATION_APIKEY_ALLOWED_KEYS: 'YOUR-WEAVIATE-API-KEY'
+      # List one or more user identities, separated by commas. Each identity corresponds to a specific key above.
+      AUTHENTICATION_APIKEY_USERS: 'jane@doe.com'
+      AUTHORIZATION_ADMINLIST_ENABLED: 'true'
+      AUTHORIZATION_ADMINLIST_USERS: 'jane@doe.com'
+      AUTHORIZATION_ADMINLIST_READONLY_USERS: 'YOUR-WEAVIATE-API-KEY'
+  t2v-transformers:
+    image: semitechnologies/transformers-inference:sentence-transformers-multi-qa-MiniLM-L6-cos-v1
+    environment:
+      ENABLE_CUDA: 0 # set to 1 to enable      
+...
