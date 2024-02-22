@@ -3,7 +3,6 @@ import axios from 'axios';
 require('dotenv').config();
 
 // Connect to Weaviate
-
 async function connectToWeaviateWithWCS() {
   return await weaviate.connectToWCS(
     process.env.WEAVIATE_URL || '',
@@ -12,7 +11,7 @@ async function connectToWeaviateWithWCS() {
       headers: {
         'X-OpenAI-Api-Key': process.env.OPENAI_API_KEY || '',  // Replace with your inference API key
       }
-    } // ⭐️ here, 💚
+    } 
   )
 }
 
@@ -169,12 +168,11 @@ async function runFullExample() {
     await importData(client);
   }
   // Near Text example
-
   let concepts = ["question about animals"];
   let nearTextResponse  = await similaritySearchNearText(concepts, client);
   console.log("Near Text objects for:", concepts, JSON.stringify(nearTextResponse, null, 2));
 
-
+  // Generative Search
   let generatedConcept = await generativeSearch(client);
   console.log("Generated Concept:", generatedConcept);
 }
