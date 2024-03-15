@@ -9,6 +9,19 @@ require('dotenv').config();
 // const client: WeaviateClient = await weaviate.connectToLocal();
 // weaviate.connectToLocal().then((client) => { ... });
 
+async function runFullExample() {
+  const handler = await Handler.use('MyCollection'); // Create the handler
+  const cleanRun = true; // change this to false if you don't want to delete the collection each run
+  handler
+    .initCollection(cleanRun)
+    .then(() => handler.importData())
+    .then(() => handler.showData());
+  // We use promise chaining here because each step depends on the successful completion of the previous step
+  // The data won't import successfully unless the collection has been created
+  // Likewise we can't show the data unless it has been imported
+  // To ensure there are no race conditions, we chain the promises together guaranteeing that each step is completed before the next one starts
+}
+
 class Handler {
   private client: WeaviateClient;
   private collection: Collection;
@@ -178,19 +191,6 @@ class Handler {
       })
       .then((res) => console.log('Near object search:', JSON.stringify(res.objects, null, 2)));
   }
-}
-
-async function runFullExample() {
-  const handler = await Handler.use('MyCollection'); // Create the handler
-  const cleanRun = true; // change this to false if you don't want to delete the collection each run
-  handler
-    .initCollection(cleanRun)
-    .then(() => handler.importData())
-    .then(() => handler.showData());
-  // We use promise chaining here because each step depends on the successful completion of the previous step
-  // The data won't import successfully unless the collection has been created
-  // Likewise we can't show the data unless it has been imported
-  // To ensure there are no race conditions, we chain the promises together guaranteeing that each step is completed before the next one starts
 }
 
 runFullExample();

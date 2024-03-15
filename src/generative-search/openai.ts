@@ -1,4 +1,4 @@
-import weaviate, { Collection, CollectionConfigCreate, WeaviateClient } from 'weaviate-client/node';
+import weaviate, { Collection, WeaviateClient } from 'weaviate-client/node';
 require('dotenv').config();
 
 // Connect to Weaviate
@@ -8,6 +8,28 @@ require('dotenv').config();
 // This is the simplest way to connect to Weaviate
 // const client: WeaviateClient = await weaviate.connectToLocal();
 // weaviate.connectToLocal().then((client) => { ... });
+
+async function runFullExample() {
+  const handler = await Handler.use(); // Create the handler
+  const cleanRun = true; // change this to false if you don't want to delete the collection each run
+  handler
+    .initCollection(cleanRun)
+    .then(() => handler.importData())
+    .then(async () => {
+      await handler.perObjectRAG(
+        'Elephants',
+        'Turn the following Jeopardy question into a Facebook Ad: {question}.'
+      );
+      await handler.groupedRAG(
+        'Animals',
+        'Explain why these Jeopardy questions are under the Animals category.'
+      );
+    });
+  // We use promise chaining here because each step depends on the successful completion of the previous step
+  // The data won't import successfully unless the collection has been created
+  // Likewise we can't show the data unless it has been imported
+  // To ensure there are no race conditions, we chain the promises together guaranteeing that each step is completed before the next one starts
+}
 
 class Handler {
   private client: WeaviateClient;
@@ -59,7 +81,7 @@ class Handler {
             dataType: 'text',
           },
         ],
-        generative: weaviate.configure.generative.openAI({ model: 'gpt-3.5-turbo' }),
+        generative: weaviate.configure.generative.openAI(),
         vectorizer: weaviate.configure.vectorizer.text2VecOpenAI(),
       })
       .then(() => console.log(`Successfully created collection: ${this.collection.name}!`));
@@ -122,28 +144,6 @@ class Handler {
       .then((generated) => JSON.stringify(generated, null, 2))
       .then((stringified) => console.log(`Grouped Task response for query (${query})`, stringified));
   }
-}
-
-async function runFullExample() {
-  const handler = await Handler.use(); // Create the handler
-  const cleanRun = true; // change this to false if you don't want to delete the collection each run
-  handler
-    .initCollection(cleanRun)
-    .then(() => handler.importData())
-    .then(async () => {
-      await handler.perObjectRAG(
-        'Elephants',
-        'Turn the following Jeopardy question into a Facebook Ad: {question}.'
-      );
-      await handler.groupedRAG(
-        'Animals',
-        'Explain why these Jeopardy questions are under the Animals category.'
-      );
-    });
-  // We use promise chaining here because each step depends on the successful completion of the previous step
-  // The data won't import successfully unless the collection has been created
-  // Likewise we can't show the data unless it has been imported
-  // To ensure there are no race conditions, we chain the promises together guaranteeing that each step is completed before the next one starts
 }
 
 runFullExample();
