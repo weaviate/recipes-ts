@@ -17,7 +17,7 @@
     "classification/zeroshot": "npm run build && node build/classification/zero-shot/example.js",
     "classification/knn": "npm run build && node build/classification/knn/example.js",
     "data-with-vectors": "npm run build && node build/data-with-vectors",
-    "multi-tenancy/example": "npm run build && node build/multi-tenancy/example.js",
+    "multi-tenancy": "npm run build && node build/multi-tenancy",
     "similarity-search/openai": "npm run build && node build/similarity-search/similarity-search-openai.js",
     "similarity-search/cohere": "npm run build && node build/similarity-search/similarity-search-cohere.js",
     "similarity-search/hugging-face": "npm run build && node build/similarity-search/similarity-search-hugging-face.js",
