@@ -3,8 +3,6 @@ import axios from 'axios';
 require('dotenv').config();
 
 async function run() {
-  return "Script Finished!"
-
+  return 'Script Finished!';
 }
-const execute = run().then(console.log)
-
+const execute = run().then(console.log);
