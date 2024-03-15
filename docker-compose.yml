@@ -3,17 +3,18 @@ version: '3.4'
 services:
   weaviate:
     command:
-    - --host
-    - 0.0.0.0
-    - --port
-    - '8080'
-    - --scheme
-    - http
-    image: semitechnologies/weaviate:1.22.4
+      - --host
+      - 0.0.0.0
+      - --port
+      - '8080'
+      - --scheme
+      - http
+    image: semitechnologies/weaviate:1.24.3
     ports:
-    - 8080:8080
+      - 8080:8080
+      - 50051:50051
     volumes:
-    - ./weaviate_data:/var/lib/weaviate
+      - ./weaviate_data:/var/lib/weaviate
     restart: on-failure:0
     environment:
       OPENAI_APIKEY: $OPENAI_API_KEY

@@ -16,7 +16,7 @@ const client: WeaviateClient = weaviate.client({
   scheme: process.env.WEAVIATE_SCHEME_URL || 'http', // Replace with https if using WCS
   host: process.env.WEAVIATE_URL || 'localhost:8080', // Replace with your Weaviate URL
   apiKey: new ApiKey(process.env.WEAVIATE_API_KEY || 'YOUR-WEAVIATE-API-KEY'), // Replace with your Weaviate API key
-  headers: { 'X-Cohere-Api-Key': process.env.COHERE_API_KEY },  // Replace with your inference API key
+  headers: { 'X-Cohere-Api-Key': process.env.COHERE_API_KEY as string }, // Replace with your inference API key
 });
 
 // Create a new collection for your data and vectors
@@ -28,9 +28,9 @@ async function createCollection() {
     vectorizer: 'text2vec-cohere',
     moduleConfig: {
       'generative-cohere': {
-        'model': 'command-xlarge-nightly',  // Optional - Defaults to `command-xlarge-nightly`. 
+        model: 'command-xlarge-nightly', // Optional - Defaults to `command-xlarge-nightly`.
         // Can also use`command-xlarge-beta` and `command-xlarge`
-      }
+      },
     },
     properties: [
       {
@@ -47,19 +47,19 @@ async function createCollection() {
         name: 'Answer',
         dataType: ['text'],
         description: 'The answer',
-      }
-    ]
-  }
+      },
+    ],
+  };
   // let's create it
   let new_class = await client.schema.classCreator().withClass(schema_definition).do();
 
   console.log('We have a new class!', new_class['class']);
 }
 
-
 // run RAG/Generative Search query with single prompt
 async function singlePrompt(query: string, prompt: string) {
-  const response = await client.graphql.get()
+  const response = await client.graphql
+    .get()
     .withClassName('JeopardyQuestion')
     .withFields('question category answer')
     .withNearText({
@@ -76,7 +76,8 @@ async function singlePrompt(query: string, prompt: string) {
 
 // run RAG/Generative Search query as a grouped Task
 async function GroupedTask(query: string, prompt: string, properties?: string[]) {
-  let response = await client.graphql.get()
+  let response = await client.graphql
+    .get()
     .withClassName('JeopardyQuestion')
     .withFields('question category answer')
     .withNearText({
@@ -84,19 +85,19 @@ async function GroupedTask(query: string, prompt: string, properties?: string[])
     })
     .withGenerate({
       groupedTask: prompt,
-      groupedProperties: properties
+      groupedProperties: properties,
     })
     .do();
 
-  let groupedtask_answer = response["data"]["Get"]["JeopardyQuestion"][0]["_additional"]["generate"]["groupedResult"];
+  let groupedtask_answer =
+    response['data']['Get']['JeopardyQuestion'][0]['_additional']['generate']['groupedResult'];
   console.log(`Grouped Task response for query (${query})`, groupedtask_answer);
 }
-
 
 async function runFullExample() {
   // comment this the line bellow if you don't want your class to be deleted each run.
   await deleteCollection();
-  if (await collectionExists() == false) {
+  if ((await collectionExists()) == false) {
     // lets create and import our collection
     await createCollection();
     await importData();
@@ -124,13 +125,13 @@ async function deleteCollection() {
   }
 }
 
-
 // import data into your collection
 async function importData() {
   // now is time to import some data
   // first, let's grab our Jeopardy Questions from the interwebs
 
-  const url = 'https://raw.githubusercontent.com/weaviate/weaviate-examples/main/jeopardy_small_dataset/jeopardy_tiny.json';
+  const url =
+    'https://raw.githubusercontent.com/weaviate/weaviate-examples/main/jeopardy_small_dataset/jeopardy_tiny.json';
   const jeopardy_questions = await axios.get(url);
 
   let counter = 0;
