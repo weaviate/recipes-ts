@@ -1,5 +1,5 @@
 {
-  "name": "multi2vec-node",
+  "name": "recipes-ts",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -38,7 +38,7 @@
     "dotenv": "^16.3.1",
     "graphql": "^16.8.1",
     "prettier": "^3.2.5",
-    "weaviate-client": "^3.0.0-beta.14",
+    "weaviate-client": "^3.0.0-beta.15",
     "weaviate-ts-client": "^1.5.0"
   }
 }
