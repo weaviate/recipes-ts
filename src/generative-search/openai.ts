@@ -23,7 +23,7 @@ class Handler {
     // This is a static method that users of our API can use to create a new instance of the Handler
     // It's a factory method that returns a new instance of the class
     // We use this pattern because the client performs I/O during initialisation so the init method
-    // must be async. This is only achievable with a factory method, constructors cannot be private
+    // must be async. This is only achievable with a factory method, constructors cannot be async
     const client = await weaviate.connectToLocal({
       httpHost: process.env.WEAVIATE_HOST || 'localhost',
       httpPort: parseInt(process.env.WEAVIATE_PORT || '8080'),
