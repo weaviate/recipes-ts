@@ -1,11 +1,15 @@
 ## Welcome to our recipe using
 
-To run this,
+To run this, add your `OPENAI_API_KEY` to your .env file. 
 
+Load your data with the following command
 
-We run this with 
-
+```bash
+npx tsx similarity-search/openai/load.ts
 ```
-node run weaviate/open-ai/load
 
+then query your data with the following command
+
+```bash
+npx tsx similarity-search/openai/query.ts
 ```
