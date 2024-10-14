@@ -1,5 +1,4 @@
 import weaviate, { WeaviateClient } from 'weaviate-client'
-import axios from 'axios';
 require('dotenv').config();
 
 async function main() {
