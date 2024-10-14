@@ -4,5 +4,4 @@ weaviate_data
 .env
 .DS_Store
 .env.example
-src/similarity-search/openai/
 yarn.lock
