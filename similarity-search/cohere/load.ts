@@ -6,12 +6,12 @@ async function main() {
 
   const weaviateURL = process.env.WEAVIATE_URL as string
   const weaviateKey = process.env.WEAVIATE_ADMIN_KEY as string
-  const openaiKey = process.env.OPENAI_API_KEY as string
+  const cohereKey = process.env.COHERE_API_KEY as string
 
   const client = await weaviate.connectToWeaviateCloud(weaviateURL,{
       authCredentials: new weaviate.ApiKey(weaviateKey),
       headers: {
-        'X-OpenAI-Api-Key': openaiKey,  // Replace with your inference API key
+        'X-Cohere-Api-Key': cohereKey,  // Replace with your inference API key
       }
     }
   )
@@ -39,7 +39,7 @@ async function main() {
           description: 'The answer',
         }
       ],
-      vectorizers: weaviate.configure.vectorizer.text2VecOpenAI(),
+      vectorizers: weaviate.configure.vectorizer.text2VecCohere(),
     });
 
     try {

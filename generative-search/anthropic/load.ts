@@ -6,11 +6,15 @@ async function main() {
 
   const weaviateURL = process.env.WEAVIATE_URL as string
   const weaviateKey = process.env.WEAVIATE_ADMIN_KEY as string
+  const anthropicKey = process.env.ANTHROPIC_API_KEY as string
   const openaiKey = process.env.OPENAI_API_KEY as string
 
-  const client = await weaviate.connectToWeaviateCloud(weaviateURL,{
+  const client = await weaviate.connectToWeaviateCloud(weaviateURL,
+    {
       authCredentials: new weaviate.ApiKey(weaviateKey),
       headers: {
+        'X-Anthropic-Api-Key': anthropicKey,
+        'X-Anthropic-Baseurl': 'https://api.anthropic.com',  // Optional; for providing a custom base URL  
         'X-OpenAI-Api-Key': openaiKey,  // Replace with your inference API key
       }
     }
@@ -40,6 +44,7 @@ async function main() {
         }
       ],
       vectorizers: weaviate.configure.vectorizer.text2VecOpenAI(),
+      generative: weaviate.configure.generative.anthropic()
     });
 
     try {

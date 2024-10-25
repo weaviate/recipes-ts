@@ -40,6 +40,7 @@ async function main() {
         }
       ],
       vectorizers: weaviate.configure.vectorizer.text2VecOpenAI(),
+      generative: weaviate.configure.generative.openAI()
     });
 
     try {

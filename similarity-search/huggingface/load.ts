@@ -6,12 +6,12 @@ async function main() {
 
   const weaviateURL = process.env.WEAVIATE_URL as string
   const weaviateKey = process.env.WEAVIATE_ADMIN_KEY as string
-  const openaiKey = process.env.OPENAI_API_KEY as string
+  const huggingFaceKey = process.env.HUGGING_FACE_API_KEY as string
 
   const client = await weaviate.connectToWeaviateCloud(weaviateURL,{
       authCredentials: new weaviate.ApiKey(weaviateKey),
       headers: {
-        'X-OpenAI-Api-Key': openaiKey,  // Replace with your inference API key
+        'X-HuggingFace-Api-Key': huggingFaceKey,  // Replace with your inference API key
       }
     }
   )
