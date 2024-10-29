@@ -12,6 +12,8 @@ Clone this repository, and install dependencies
 ```
 npm install
 ```
+
+Alternatively, you can run these recipes on [Stackblitz]()
 ### 2. Choose where to run Weaviate
 
 #### 2.1 Run in Weaviate Cloud Service
@@ -27,9 +29,12 @@ docker compose up -d
 **IMPORTANT:** make sure to define the environment variables before running Docker
 
 ### 3. Define environment variables
-[get your OPENAI key here](https://platform.openai.com/account/api-keys)
-
-[get your COHERE key here](https://dashboard.cohere.com/api-keys)
+[Get your Open AI key here](https://platform.openai.com/account/api-keys)
+[Get your Cohere key here](https://dashboard.cohere.com/api-keys)
+[Get your Anthropic key here]()
+[Get your Google key here]()
+[Get your Mistral key here]()
+[Get your HuggingFace key here]()
 
 ```
 cp .env_example .env
@@ -45,48 +50,38 @@ COHERE_API_KEY=<your cohere apikey>
 if you are using WCS, you can keep it like this:
 
 ```
-WEAVIATE_SCHEME_URL=https
-WEAVIATE_URL=<yourcluster.weaviate.network>
-WEAVIATE_API_KEY=<your_apikey>
+WEAVIATE_URL=<https://yourcluster.weaviate.network>
+WEAVIATE_ADMIN_KEY=<your_apikey>
 OPENAI_API_KEY=<your openai apikey>
 COHERE_API_KEY=<your cohere apikey>
 HUGGING_FACE_API_KEY=<your huggingface apikey>
-PALM_API_KEY=<your palm apikey>
+GOOGLE_API_KEY=<your google apikey>
+ANTHROPIC_API_KEY=<your anthropic apikey>
+MISTRAL_API_KEY=<your mistral apikey>
 ```
 
 ### 4. Run a Recipe!
-currently available recipes:
+Navigate to the folder containing the concept (e.g. generative search) and provider (e.g. Cohere) you want to use and follow the instructions the the folders README file. 
 
-- `npm run similarity-search/openai`
-- _more coming soon!_
+Here is an example to creating a collection and importanting data in preparation for a semantic search query. 
+
+```npx tsx generative-search/cohere/load.ts```
 </details>
 
 
 Here is an outline of the concepts this repository covers:
 
 ### Similarity Search 🔎
-[Similarity Search]() shows how to run `nearText`, `nearObject` and `nearVector` queries in Weaviate. It is divided by the different providers:
-
-
-* [OpenAI]() - `npm run similarity-search/openai`
+[Similarity Search]() shows how to run `nearText`, `nearObject` and `nearVector` queries in Weaviate. We have examples with multiple providers available.
 
 
 ### Hybrid Search ⚖️
-[Hybrid Search]() allows you to combine keyword and vector search. The notebook covers how to run a hybrid search query, search on a specific property, add in a `where` filter, and how to search with an embedding. It is divided by the different providers:
+[Hybrid Search]() allows you to combine keyword and vector search. The notebook covers how to run a hybrid search query, search on a specific property, add in a `where` filter, and how to search with an embedding.We have examples with multiple providers available.
 
-* [Cohere]() - coming soon ⏳
-* [Contextionary]() - coming soon ⏳
-* [HuggingFace]() - coming soon ⏳
-* [OpenAI]() - coming soon ⏳
-* [PaLM]() - coming soon ⏳
-* [Transformers]() - coming soon ⏳
 
 ### Generative Search ⌨️
-[Generative Search]() allows you to improve your search results by piping them through LLM models. It is divided by the different providers:
+[Generative Search]() allows you to improve your search results by piping them through LLM models. We have examples with multiple providers available.
 
-* [Cohere]() - coming soon ⏳
-* [OpenAI]() - coming soon ⏳
-* [PaLM]() - coming soon ⏳
 
 ### Classification 🗂️
 [Classification](https://weaviate.io/developers/weaviate/api/rest/classification) allows you to classify data objects by predicting cross-references based on the semantic meaning of the data objects.

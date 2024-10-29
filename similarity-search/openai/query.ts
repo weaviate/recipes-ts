@@ -1,5 +1,5 @@
 import weaviate, { WeaviateClient } from 'weaviate-client'
-require('dotenv').config();
+import 'dotenv/config'
 
 async function main() {
 
@@ -7,13 +7,12 @@ async function main() {
     const weaviateKey = process.env.WEAVIATE_ADMIN_KEY as string
     const openaiKey = process.env.OPENAI_API_KEY as string
 
-    const client = await weaviate.connectToWeaviateCloud(weaviateURL,{
+    const client: WeaviateClient = await weaviate.connectToWeaviateCloud(weaviateURL,{
         authCredentials: new weaviate.ApiKey(weaviateKey),
         headers: {
             'X-OpenAI-Api-Key': openaiKey,  // Replace with your inference API key
         }
-        }
-    )
+    })
 
     const jeopardyCollection = client.collections.get('JeopardyQuestion');
     const searchResults = await jeopardyCollection.query.nearText(['question about animals'])

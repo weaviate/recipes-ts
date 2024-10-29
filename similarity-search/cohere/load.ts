@@ -1,6 +1,6 @@
 import weaviate, { WeaviateClient } from 'weaviate-client'
 import axios from 'axios';
-require('dotenv').config();
+import 'dotenv/config'
 
 async function main() {
 
@@ -8,7 +8,7 @@ async function main() {
   const weaviateKey = process.env.WEAVIATE_ADMIN_KEY as string
   const cohereKey = process.env.COHERE_API_KEY as string
 
-  const client = await weaviate.connectToWeaviateCloud(weaviateURL,{
+  const client: WeaviateClient = await weaviate.connectToWeaviateCloud(weaviateURL,{
       authCredentials: new weaviate.ApiKey(weaviateKey),
       headers: {
         'X-Cohere-Api-Key': cohereKey,  // Replace with your inference API key

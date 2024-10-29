@@ -1,15 +1,15 @@
 ## Welcome to our recipe using
 
-To run this, add your `OPENAI_API_KEY` to your .env file. 
+To run this, add your `GOOGLE_API_KEY` to your .env file. 
 
 Load your data with the following command
 
 ```bash
-npx tsx similarity-search/openai/load.ts
+npx tsx generative-search/google/load.ts
 ```
 
 then query your data with the following command
 
 ```bash
-npx tsx similarity-search/openai/query.ts
+npx tsx generative-search/google/query.ts
 ```

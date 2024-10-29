@@ -1,5 +1,5 @@
 import weaviate, { WeaviateClient } from 'weaviate-client'
-require('dotenv').config();
+import 'dotenv/config'
 
 async function main() {
 
@@ -7,8 +7,7 @@ async function main() {
     const weaviateKey = process.env.WEAVIATE_ADMIN_KEY as string
     const cohereKey = process.env.COHERE_API_KEY as string
 
-    const client = await weaviate.connectToWeaviateCloud(weaviateURL,
-        {
+    const client: WeaviateClient = await weaviate.connectToWeaviateCloud(weaviateURL,{
             authCredentials: new weaviate.ApiKey(weaviateKey),
             headers: {
                 'X-Cohere-Api-Key': cohereKey,  // Replace with your inference API key
@@ -16,9 +15,9 @@ async function main() {
         })
 
     const jeopardyCollection = client.collections.get('JeopardyQuestion');
-    const searchresults = await jeopardyCollection.query.nearText(['question about animals'])
+    const searchResults = await jeopardyCollection.query.nearText(['question about animals'])
 
-    console.log("Near Text objects for:", "search", JSON.stringify(searchresults, null, 2));
+    console.log("Near Text objects for:", "search", JSON.stringify(searchResults, null, 2));
 }
 
 void main();

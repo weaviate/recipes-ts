@@ -1,5 +1,5 @@
 import weaviate, { WeaviateClient } from 'weaviate-client'
-require('dotenv').config();
+import 'dotenv/config'
 
 async function main() {
 
@@ -8,7 +8,8 @@ async function main() {
     const anthropicKey = process.env.ANTHROPIC_API_KEY as string
     const openaiKey = process.env.OPENAI_API_KEY as string
 
-    const client = await weaviate.connectToWeaviateCloud(weaviateURL,
+    // Connect to your Weaviate database on Weaviate Cloud
+    const client: WeaviateClient = await weaviate.connectToWeaviateCloud(weaviateURL,
         {
           authCredentials: new weaviate.ApiKey(weaviateKey),
           headers: {
@@ -21,7 +22,7 @@ async function main() {
 
         const myCollection = client.collections.get('JeopardyQuestion');
 
-        // Generative Search with Single Prompt
+        // Make a Generative Search with a Single Prompt
         const genResult = await myCollection.generate.nearText("african elephant in savanna", {
             singlePrompt: "tell me a quick story about this {question} or {answer}",
         })
@@ -30,9 +31,9 @@ async function main() {
             console.log("Single Generated Concept:", item.generated);
         }
     
-        // Generative Search with Grouped Task
+        // Make a Generative Search with a Grouped Task
         const groupedGenResult = await myCollection.generate.nearText("african elephant in savanna", {
-            singlePrompt: "Could you summarize all the results received into a single informational paragraph?",
+            groupedTask: "Could you summarize all the results received into a single informational paragraph?",
         })
         
         console.log("Grouped Generated Concept:", genResult.generated);

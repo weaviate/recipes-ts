@@ -1,6 +1,6 @@
 import weaviate, { WeaviateClient } from 'weaviate-client'
 import axios from 'axios';
-require('dotenv').config();
+import 'dotenv/config'
 
 async function main() {
 
@@ -8,7 +8,7 @@ async function main() {
   const weaviateKey = process.env.WEAVIATE_ADMIN_KEY as string
   const googleKey = process.env.GOOGLE_API_KEY as string
 
-  const client = await weaviate.connectToWeaviateCloud(weaviateURL,{
+  const client: WeaviateClient = await weaviate.connectToWeaviateCloud(weaviateURL,{
       authCredentials: new weaviate.ApiKey(weaviateKey),
       headers: {
         'X-Google-Vertex-Api-Key': googleKey,  // Replace with your inference API key
