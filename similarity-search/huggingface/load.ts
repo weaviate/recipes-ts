@@ -9,13 +9,12 @@ async function main() {
   const huggingFaceKey = process.env.HUGGING_FACE_API_KEY as string
 
   // Connect to your Weaviate instance  
-  const client: WeaviateClient = await weaviate.connectToWeaviateCloud(weaviateURL,{
-      authCredentials: new weaviate.ApiKey(weaviateKey),
-      headers: {
-        'X-HuggingFace-Api-Key': huggingFaceKey,  // Replace with your inference API key
-      }
+  const client: WeaviateClient = await weaviate.connectToWeaviateCloud(weaviateURL, {
+    authCredentials: new weaviate.ApiKey(weaviateKey),
+    headers: {
+      'X-HuggingFace-Api-Key': huggingFaceKey,  // Replace with your inference API key
     }
-  )
+  })
 
   // Delete the "JeopardyQuestion" collection if it exists
   await client.collections.delete('JeopardyQuestion');
@@ -53,7 +52,7 @@ async function main() {
       // Download data to import into the "JeopardyQuestion" collection
       const url = 'https://raw.githubusercontent.com/weaviate/weaviate-examples/main/jeopardy_small_dataset/jeopardy_tiny.json'
       const jeopardyQuestions = await axios.get(url);
-      
+
       // Bulk insert downloaded data into the "JeopardyQuestion" collection
       await jeopardyCollection.data.insertMany(jeopardyQuestions.data)
 

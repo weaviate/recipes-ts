@@ -10,17 +10,15 @@ async function main() {
   const openaiKey = process.env.OPENAI_API_KEY as string
 
   // Connect to your Weaviate instance  
-  const client: WeaviateClient = await weaviate.connectToWeaviateCloud(weaviateURL,
-    {
-      authCredentials: new weaviate.ApiKey(weaviateKey),
-      headers: {
-        'X-Anthropic-Api-Key': anthropicKey,
-        'X-Anthropic-Baseurl': 'https://api.anthropic.com',  // Optional; for providing a custom base URL  
-        'X-OpenAI-Api-Key': openaiKey,  // Replace with your inference API key
-      }
+  const client: WeaviateClient = await weaviate.connectToWeaviateCloud(weaviateURL, {
+    authCredentials: new weaviate.ApiKey(weaviateKey),
+    headers: {
+      'X-Anthropic-Api-Key': anthropicKey,
+      'X-Anthropic-Baseurl': 'https://api.anthropic.com',  // Optional; for providing a custom base URL  
+      'X-OpenAI-Api-Key': openaiKey,  // Replace with your inference API key
     }
-  )
-  
+  })
+
   // Delete the "JeopardyQuestion" collection if it exists
   await client.collections.delete('JeopardyQuestion');
 

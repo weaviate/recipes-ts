@@ -1,4 +1,4 @@
-## Welcome to our recipe using
+## Welcome to our recipe
 
 To run this, add your `GOOGLE_API_KEY` to your .env file. 
 

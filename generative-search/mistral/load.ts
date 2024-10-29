@@ -9,13 +9,12 @@ async function main() {
   const mistralKey = process.env.MISTRAL_API_KEY as string
 
   // Connect to your Weaviate instance  
-  const client: WeaviateClient = await weaviate.connectToWeaviateCloud(weaviateURL,{
-      authCredentials: new weaviate.ApiKey(weaviateKey),
-      headers: {
-        'X-Mistral-Api-Key': mistralKey,  // Replace with your inference API key
-      }
+  const client: WeaviateClient = await weaviate.connectToWeaviateCloud(weaviateURL, {
+    authCredentials: new weaviate.ApiKey(weaviateKey),
+    headers: {
+      'X-Mistral-Api-Key': mistralKey,  // Replace with your inference API key
     }
-  )
+  })
 
   // Delete the "JeopardyQuestion" collection if it exists
   await client.collections.delete('JeopardyQuestion');

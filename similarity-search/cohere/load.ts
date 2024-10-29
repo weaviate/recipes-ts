@@ -9,19 +9,18 @@ async function main() {
   const cohereKey = process.env.COHERE_API_KEY as string
 
   // Connect to your Weaviate instance  
-  const client: WeaviateClient = await weaviate.connectToWeaviateCloud(weaviateURL,{
-      authCredentials: new weaviate.ApiKey(weaviateKey),
-      headers: {
-        'X-Cohere-Api-Key': cohereKey,  // Replace with your inference API key
-      }
+  const client: WeaviateClient = await weaviate.connectToWeaviateCloud(weaviateURL, {
+    authCredentials: new weaviate.ApiKey(weaviateKey),
+    headers: {
+      'X-Cohere-Api-Key': cohereKey,  // Replace with your inference API key
     }
-  )
+  })
 
   // Delete the "JeopardyQuestion" collection if it exists
   await client.collections.delete('JeopardyQuestion');
 
   if (await client.collections.exists('JeopardyQuestion') == false) {
-    
+
     // Create a collection with both a vectorizer and generative model
     await client.collections.create({
       name: 'JeopardyQuestion',
@@ -48,7 +47,7 @@ async function main() {
 
     try {
       let jeopardyCollection = client.collections.get('JeopardyQuestion');
-      
+
       // Download data to import into the "JeopardyQuestion" collection
       const url = 'https://raw.githubusercontent.com/weaviate/weaviate-examples/main/jeopardy_small_dataset/jeopardy_tiny.json'
       const jeopardyQuestions = await axios.get(url);
