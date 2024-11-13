@@ -23,7 +23,7 @@ async function main() {
         includeVector: false // Change to true to include objects' vectors in your response
     })
 
-    console.log("Near Text objects for:", "search", JSON.stringify(searchResults, null, 2));
+    console.log("Near Text objects:", JSON.stringify(searchResults, null, 2));
 }
 
 void main();
