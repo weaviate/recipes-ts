@@ -7,7 +7,7 @@ async function main() {
     const weaviateKey = process.env.WEAVIATE_ADMIN_KEY as string
     const googleKey = process.env.GOOGLE_API_KEY as string
 
-    // Connect to your Weaviate instance  
+    // Step 1: Connect to your Weaviate instance  
     const client: WeaviateClient = await weaviate.connectToWeaviateCloud(weaviateURL, {
         authCredentials: new weaviate.ApiKey(weaviateKey),
         headers: {
@@ -15,15 +15,18 @@ async function main() {
         }
     })
 
-    const jeopardyCollection = client.collections.get('JeopardyQuestion');
-    // Make a semantic search query to the "JeopardyQuestion" with text as query input
-    const searchResults = await jeopardyCollection.query.nearText(['question about animals'], {
+    const wikipediaCollection = client.collections.get('Wikipedia');
+    // Step 2: Make a semantic search query to the "Wikipedia" with text as query input
+    const searchResults = await wikipediaCollection.query.nearText('women in the olympics', {
         limit: 3,
         returnMetadata: ['distance'], // Return the distance of results from the query vector
-        includeVector: false // Change to true to include objects' vectors in your response
     })
 
-    console.log("Near Text objects:", JSON.stringify(searchResults, null, 2));
+    for (const item of searchResults.objects) {
+        console.log("\n Search Results \n");
+        console.log("...", item.properties.title);
+        console.log("...", item.properties.text);        
+    }
 }
 
 void main();

@@ -1,5 +1,4 @@
 import weaviate, { WeaviateClient } from 'weaviate-client'
-import axios from 'axios';
 import 'dotenv/config'
 
 async function main() {
@@ -8,7 +7,7 @@ async function main() {
   const weaviateKey = process.env.WEAVIATE_ADMIN_KEY as string
   const openaiKey = process.env.OPENAI_API_KEY as string
 
-  // Connect to your Weaviate instance  
+  // Step 1: Connect to your Weaviate instance  
   const client: WeaviateClient = await weaviate.connectToWeaviateCloud(weaviateURL, {
     authCredentials: new weaviate.ApiKey(weaviateKey),
     headers: {
@@ -16,45 +15,31 @@ async function main() {
     }
   })
 
-  // Delete the "JeopardyQuestion" collection if it exists
-  await client.collections.delete('JeopardyQuestion');
+  // Delete the "Wikipedia" collection if it exists
+  await client.collections.delete('Wikipedia');
 
-  if (await client.collections.exists('JeopardyQuestion') == false) {
+  if (await client.collections.exists('Wikipedia') == false) {
 
-    // Create a collection with both a vectorizer and generative model
+    // Step 2: Create a collection with both a vectorizer and generative model
     await client.collections.create({
-      name: 'JeopardyQuestion',
-      properties: [
-        {
-          name: 'Category',
-          dataType: 'text' as const,
-          description: 'Category of the question',
-        },
-        {
-          name: 'Question',
-          dataType: 'text' as const,
-          description: 'The question',
-        },
-        {
-          name: 'Answer',
-          dataType: 'text' as const,
-          description: 'The answer',
-        }
-      ],
+      name: 'Wikipedia',
       // Define your Cohere vectorizer and generative model  
-      vectorizers: weaviate.configure.vectorizer.text2VecOpenAI(),
+      vectorizers: weaviate.configure.vectorizer.text2VecOpenAI({
+        sourceProperties: ['title','text']
+      }),
       generative: weaviate.configure.generative.openAI()
     });
 
     try {
-      let jeopardyCollection = client.collections.get('JeopardyQuestion');
+      let wikipediaCollection = client.collections.get('Wikipedia');
 
-      // Download data to import into the "JeopardyQuestion" collection
-      const url = 'https://raw.githubusercontent.com/weaviate/weaviate-examples/main/jeopardy_small_dataset/jeopardy_tiny.json'
-      const jeopardyQuestions = await axios.get(url);
+      // Step 3: Download data to import into the "Wikipedia" collection
+      const url = 'https://raw.githubusercontent.com/weaviate/weaviate-examples/main/wikipedia-small-dataset/wiki-10.json'
+      const response = await fetch(url);
+      const wikipediaPages = await response.json();
 
-      // Bulk insert downloaded data into the "JeopardyQuestion" collection
-      await jeopardyCollection.data.insertMany(jeopardyQuestions.data)
+      // Step 4: Bulk insert downloaded data into the "Wikipedia" collection
+      await wikipediaCollection.data.insertMany(wikipediaPages)
 
       console.log('Data Imported');
     } catch (e) {

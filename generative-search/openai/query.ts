@@ -7,7 +7,7 @@ async function main() {
     const weaviateKey = process.env.WEAVIATE_ADMIN_KEY as string
     const openaiKey = process.env.OPENAI_API_KEY as string
 
-    // Connect to your Weaviate database on Weaviate Cloud
+    // Step 1: Connect to your Weaviate database on Weaviate Cloud
     const client: WeaviateClient = await weaviate.connectToWeaviateCloud(weaviateURL, {
         authCredentials: new weaviate.ApiKey(weaviateKey),
         headers: {
@@ -15,20 +15,24 @@ async function main() {
         }
     })
 
-    const myCollection = client.collections.get('JeopardyQuestion');
+    const myCollection = client.collections.get('Wikipedia');
 
-    // Make a generative search with a single prompt
-    const genResult = await myCollection.generate.nearText("african elephant in savanna", {
-        singlePrompt: "tell me a quick story about this {question} or {answer}",
+    // Step 2: Make a generative search with a single prompt
+    const genResult = await myCollection.generate.nearText('women in the olympics', {
+        singlePrompt: "Write a haiku about {text} that includes at least a word from {title}",
+    }, {
+        limit: 3
     })
 
     for (const item of genResult.objects) {
         console.log("Single generated concept:", item.generated);
     }
 
-    // Make a generative search with a grouped task
-    const groupedGenResult = await myCollection.generate.nearText("african elephant in savanna", {
-        groupedTask: "Summarize all the results received into a single informational paragraph?",
+    // Step 3: Make a generative search with a grouped task
+    const groupedGenResult = await myCollection.generate.nearText('women in the olympics', {
+        groupedTask: "Summarize all the results received in 100 words",
+    }, {
+        limit: 3
     })
 
     console.log("Grouped generated concept:", groupedGenResult.generated);

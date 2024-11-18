@@ -3,5 +3,4 @@ build/
 weaviate_data
 .env
 .DS_Store
-.env.example
 yarn.lock
