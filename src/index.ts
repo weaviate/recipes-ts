@@ -1,1 +1,1 @@
-console.log('Hello world from Weaviate!')
+console.log('Hello worldzzz!')
