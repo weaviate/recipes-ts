@@ -2,11 +2,12 @@
 This repo covers end-to-end examples of various features and integrations with [Weaviate](www.weaviate.io) for Javascript Developers! 
 
 > 💡 This repo can also be used online with [Replit](https://replit.com/@malgamves/recipes-ts)
-> 
-⚠️ Before getting started, you need to follow the installation **Setup Instructions** detailed in the setup section of this document. You will need the setup completed to successfully run the recipes.
+
+> ⚠️ Before getting started, you need to follow the installation **Setup Instructions** detailed in the setup section of this document. You will need the setup completed to successfully run the recipes.
 
 <details>
   <summary>Setup Instructions 🚀 </summary>
+
 ## Setup Instructions 🚀 
 
 ### 1. Install npm packages
@@ -26,6 +27,7 @@ Take note of your `cluster URL` and `apiKey` and add them to your `.env` file as
 Considering you already have docker installed, you can run:
 ```
 docker compose up -d
+
 ```
 > ⚠️ If you use Docker, please update all the `connectToWeeaviateCloud()` methods to `connectToLocal()`. 
 
