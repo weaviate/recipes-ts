@@ -25,7 +25,7 @@ async function main() {
       name: 'Wikipedia',
       // Define your Cohere vectorizer  
       vectorizers: weaviate.configure.vectorizer.text2VecOpenAI({
-        sourceProperties: ['title','text']
+        sourceProperties: ['text', 'title']
       }),
     });
 
@@ -40,7 +40,7 @@ async function main() {
       // Step 4: Bulk insert downloaded data into the "Wikipedia" collection
       await wikipediaCollection.data.insertMany(wikipediaPages)
 
-      console.log('Data Imported');
+      console.log('Data Imported! Hooray');
     } catch (e) {
       console.error(e);
     }

@@ -17,15 +17,16 @@ async function main() {
 
     const wikipediaCollection = client.collections.get('Wikipedia');
     // Step 2: Make a semantic search query to the "Wikipedia" with text as query input
+
     const searchResults = await wikipediaCollection.query.nearText('women in the olympics', {
-        limit: 3,
+        autoLimit: 1,
         returnMetadata: ['distance'], // Return the distance of results from the query vector
     })
 
     for (const item of searchResults.objects) {
         console.log("\n Search Results \n");
-        console.log("...", item.properties.title);
-        console.log("...", item.properties.text);        
+        console.log("...",item.metadata?.distance, item.properties.title);
+        console.log("...",item.metadata?.distance, item.properties.text);        
     }
 }
 

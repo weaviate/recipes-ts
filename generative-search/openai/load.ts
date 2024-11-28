@@ -27,6 +27,12 @@ async function main() {
       vectorizers: weaviate.configure.vectorizer.text2VecOpenAI({
         sourceProperties: ['title','text']
       }),
+      properties: [
+        { 
+          name: "name",
+          dataType: weaviate.configure.dataType.TEXT,
+        },
+      ],
       generative: weaviate.configure.generative.openAI()
     });
 

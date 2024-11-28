@@ -18,19 +18,29 @@ async function main() {
     const myCollection = client.collections.get('Wikipedia');
 
     // Step 2: Make a generative search with a single prompt
-    const genResult = await myCollection.generate.nearText('women in the olympics', {
-        singlePrompt: "Write a haiku about {text} that includes at least a word from {title}",
-    }, {
-        limit: 3
-    })
+    // const genResult = await myCollection.generate.nearText('women in the olympics', {
+    //     singlePrompt: "Write a haiku about {text} that includes at least a word from {title}",
+    //     // title: "hello world"
+    //     // text: "this a great workshop"
 
-    for (const item of genResult.objects) {
-        console.log("Single generated concept:", item.generated);
-    }
+    //     // title: "hello my lovely world"
+    //     // text: "this a really good workshop"
+    // }, {
+    //     limit: 3
+    // })
+
+    // for (const item of genResult.objects) {
+    //     console.log("Single generated concept:", item.generated);
+    // }
 
     // Step 3: Make a generative search with a grouped task
     const groupedGenResult = await myCollection.generate.nearText('women in the olympics', {
-        groupedTask: "Summarize all the results received in 100 words",
+        groupedTask: "you're my assitant, i want to impress people on a webinar, what item in this list is the most impressive?",
+        // title: "hello world"
+    //     // text: "this a great workshop"
+
+    //     // title: "hello my lovely world"
+    //     // text: "this a really good workshop"
     }, {
         limit: 3
     })
