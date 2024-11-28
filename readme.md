@@ -58,11 +58,11 @@ Clone this repository, and install the project dependencies
 npm install
 ```
 
-### 2 Run locally using Docker
-Fetch Considering you already have docker installed, you can run:
+### 2. Run locally using Docker
+Considering you already have docker installed, follow along our Docker [installation guide](https://weaviate.io/developers/weaviate/installation/docker-compose). Then run the command below to start your Weaviate server.
+
 ```
 docker compose up -d
-
 ```
 > ⚠️ When using Docker, remember to update all the `connectToWeaviateCloud()` methods to `connectToLocal()`. 
 
