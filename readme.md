@@ -81,10 +81,10 @@ Now you're ready to run a recipe!
 
 ## Run a Recipe!
 
-Recipes are organized by concepts using folders (i.e similarity search). Each concept folder has multiple folders showing its implementation with various model providers (i.e Cohere, Mistral AI etc).
-Provider sub folders contain relevant scripts and a `README.md` file with details on how to run each specific recipe.
+Recipes are organized by concepts using folders (i.e. similarity search). Each concept folder has multiple folders showing its implementation with various model providers (i.e. Cohere, Mistral AI etc).
+Provider subfolders contain relevant scripts and a `README.md` file with details on how to run each specific recipe.
 
-To run a recipe, navigate to the concept you are interested in and select a provider to run it with.Follow the instructions in the `README.md` file and you should be good to go. 
+To run a recipe, navigate to the concept you are interested in and select a provider to run it with. Follow the instructions in the `README.md` file and you should be good to go. 
 
 > ⚠️ Remember to add the relevant API keys to your `.env` files
 
