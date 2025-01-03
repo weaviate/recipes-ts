@@ -38,13 +38,17 @@ async function main() {
       const wikipediaPages = await response.json();
 
       // Step 4: Bulk insert downloaded data into the "Wikipedia" collection
-      await wikipediaCollection.data.insertMany(wikipediaPages)
+      const res = await wikipediaCollection.data.insertMany(wikipediaPages)
+      
+      console.log(res);
 
       console.log('Data Imported');
     } catch (e) {
       console.error(e);
     }
   }
+
+  await client.close()
 }
 
 void main();

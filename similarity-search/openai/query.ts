@@ -28,6 +28,8 @@ async function main() {
         console.log("...",item.metadata?.distance, item.properties.title);
         console.log("...",item.metadata?.distance, item.properties.text);        
     }
+
+  await client.close()
 }
 
 void main();

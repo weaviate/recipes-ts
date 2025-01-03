@@ -27,6 +27,8 @@ async function main() {
         console.log("...", item.properties.title);
         console.log("...", item.properties.text);        
     }
+
+    await client.close()
 }
 
 void main();
