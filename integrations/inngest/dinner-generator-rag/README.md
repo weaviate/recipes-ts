@@ -15,9 +15,9 @@ This project demonstrates how to build an AI-powered dinner menu generator using
 To run this project, you'll need:
 
 - Node.js installed
-- A Weaviate Cloud instance
-- OpenAI API key
-- Inngest account
+- A [Weaviate Cloud instance](https://console.weaviate.cloud/)
+- [OpenAI API key](https://platform.openai.com/api-keys)
+- [Inngest account](https://www.inngest.com/?ref=weaviate-recipes-repo-dinner-generator) (_optional for local development_)
 
 ## 🌱 Setup
 
@@ -29,6 +29,33 @@ OPENAI_API_KEY=your_openai_key
 WCD_URL=your_weaviate_cloud_url
 WCD_API_KEY=your_weaviate_api_key
 ```
+
+## 📚 Files overview
+
+**`src/inngest/events.ts`**
+
+This file defines the events used to trigger our workflow.
+
+The project comes with the event later used in our example to trigger the Christmas dinner generation workflow.
+
+Events are composed of:
+
+- a mandatory `name`
+- an optional object as `data`
+
+The events are created with [`zod`](https://zod.dev/) and passed to the Inngest client, enabling an E2E-typed experience.
+
+**`src/inngest/functions.ts`**
+
+This is where our workflow is defined, using `inngest.createFunction()`.
+
+[Inngest Functions](https://www.inngest.com/docs/features/inngest-functions?ref=weaviate-recipes-repo-dinner-generator) are composed of multiple steps, enabling you to write workflows relying on independently retriable steps.
+
+Our first workflow is a simple example of multiple “hello worlds”.
+
+**`src/server.ts`**
+
+Inngest Functions are exposed to the Inngest Dev Server via a simple express server.
 
 ## 🔍 Loading Data
 
@@ -63,6 +90,12 @@ npm run inngest
   }
 }
 ```
+
+![Inngest DevServer UI](./inngest-dev-server-functions.png)
+
+Once the workflow is triggered, you can see the run in the Inngest DevServer UI.
+
+![Inngest DevServer UI](./inngest-dev-server-runs.png)
 
 ## 📚 How it Works
 

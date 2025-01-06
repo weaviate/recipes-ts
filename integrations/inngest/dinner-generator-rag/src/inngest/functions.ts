@@ -4,7 +4,7 @@ import { openai } from "inngest";
 import { inngest } from "./client";
 
 export const generateMeal = inngest.createFunction(
-  { id: "generate-meal" },
+  { id: "generate-meal", concurrency: 10 },
   { event: "meal.generate" },
   async ({ event, step }) => {
     const { participantsCount, preferences, cuisine_type } = event.data;
