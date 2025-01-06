@@ -54,12 +54,12 @@ npm run inngest
 
 3. Open the Inngest DevServer UI at http://127.0.0.1:8288 and trigger a new runs from the _Functions_ tab using the following event data:
 
-```typescript
+```json
 {
-  data: {
-    participantsCount: 4,
-    preferences: ["gluten-free", "vegan"],
-    cuisine_type: "Italian"
+  "data": {
+    "participantsCount": 4,
+    "preferences": ["no nuts", "vegan"],
+    "cuisine_type": "Italian"
   }
 }
 ```

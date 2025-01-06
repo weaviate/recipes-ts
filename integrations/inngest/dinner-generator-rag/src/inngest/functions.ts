@@ -47,10 +47,12 @@ export const generateMeal = inngest.createFunction(
       },
     });
 
+    let ingredientsAlternatives: any[] = [];
+
     // run some conditional AI steps
     if (allergiesAnalysis.choices[0].message.content !== "not allergies") {
       // Query relevant recipes based on cusine type preference
-      const ingredientsAlternatives = await step.run(
+      ingredientsAlternatives = await step.run(
         "query-ingredients-alternatives",
         async () => {
           const collection = client.collections.get(
@@ -65,32 +67,6 @@ export const generateMeal = inngest.createFunction(
           return result.objects;
         }
       );
-
-      const updatedRecipes = await step.ai.infer("Update recipes", {
-        model: openai({ model: "gpt-4" }),
-        body: {
-          messages: [
-            {
-              role: "user",
-              content: `Update the following recipes based on the provided ingredients alternatives:
-              <ingredients-alternatives>
-              ${ingredientsAlternatives
-                .map((r) => r.properties.ingredients_alternatives)
-                .join(", ")}
-              </ingredients-alternatives>
-
-              <recipes>
-              ${relevantRecipes}
-              </recipes>
-              `,
-            },
-          ],
-        },
-      });
-
-      relevantRecipes = updatedRecipes.choices[0].message.content!.match(
-        /<updated-recipes>(.*?)<\/updated-recipes>/s
-      )![1];
     }
 
     // Generate meal plan using step.ai.wrap()
@@ -111,6 +87,15 @@ export const generateMeal = inngest.createFunction(
       
       Use these recipes as inspiration:
       ${relevantRecipes}
+
+      ${
+        ingredientsAlternatives.length > 0 &&
+        `Some allergies to ${
+          allergiesAnalysis.choices[0].message.content
+        } were detected, here are some ingredients alternatives to take into account: ${ingredientsAlternatives
+          .map((r) => r.properties.ingredients_alternatives)
+          .join(", ")}`
+      }
       
       Include:
       1. Appetizers
