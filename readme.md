@@ -1,12 +1,14 @@
-# Welcome to the Weaviate Javascript recipes repository!
-This repo covers end-to-end examples of various features and integrations with [Weaviate](www.weaviate.io) for Javascript Developers! 
+![Weaviate Recipes](/Weaviate.png)
+
+# Welcome to Weaviate JavaScript Recipes 💚
+This repo covers end-to-end examples of various features and integrations with [Weaviate](www.weaviate.io) for JavaScript Developers! 
 
 > 💡 This repo can also be used online with [Replit](https://replit.com/@malgamves/recipes-ts)
 
 
 ## What are recipes? 
 
-Recipes are end-to-end scripts showing various features and integrations. Recipes act as a reference for what using the Weaviate client can look like. 
+Recipes are end-to-end scripts showing various features and integrations. Recipes are a reference for what using the Weaviate client can look like. 
 
 
 ## Concepts Covered 🗺️
