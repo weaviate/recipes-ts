@@ -46,6 +46,8 @@ async function main() {
       console.error(e);
     }
   }
+
+  await client.close()
 }
 
 void main();

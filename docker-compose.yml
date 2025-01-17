@@ -9,7 +9,7 @@ services:
     - '8080'
     - --scheme
     - http
-    image: semitechnologies/weaviate:1.27.3
+    image: semitechnologies/weaviate:1.28.2
     ports:
     - 8080:8080
     volumes:
@@ -22,8 +22,8 @@ services:
       QUERY_DEFAULTS_LIMIT: 25
       AUTHENTICATION_ANONYMOUS_ACCESS_ENABLED: 'true'
       PERSISTENCE_DATA_PATH: '/var/lib/weaviate'
-      DEFAULT_VECTORIZER_MODULE: 'text2vec-openai'
-      ENABLE_MODULES: 'text2vec-openai,text2vec-cohere,generative-openai,generative-cohere,text2vec-transformers'
+      DEFAULT_VECTORIZER_MODULE: 'text2vec-ollama'
+      ENABLE_MODULES: 'text2vec-openai,text2vec-cohere,generative-openai,generative-cohere,text2vec-transformers, text2vec-ollama, generative-ollama'
       TRANSFORMERS_INFERENCE_API: http://t2v-transformers:8080
       CLUSTER_HOSTNAME: 'node1'
       # Enables API key authentication.
@@ -35,6 +35,8 @@ services:
       AUTHORIZATION_ADMINLIST_ENABLED: 'true'
       AUTHORIZATION_ADMINLIST_USERS: 'jane@doe.com'
       AUTHORIZATION_ADMINLIST_READONLY_USERS: 'YOUR-WEAVIATE-API-KEY'
+  ollama:
+    image: ollama/ollama
   t2v-transformers:
     image: semitechnologies/transformers-inference:sentence-transformers-multi-qa-MiniLM-L6-cos-v1
     environment:

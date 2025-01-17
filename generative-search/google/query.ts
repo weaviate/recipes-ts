@@ -32,6 +32,8 @@ async function main() {
     })
 
     console.log("Grouped generated concept:", groupedGenResult.generated);
+
+  await client.close()
 }
 
 void main();
