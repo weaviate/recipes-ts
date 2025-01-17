@@ -13,10 +13,8 @@
     "typescript": "^5.6.3"
   },
   "dependencies": {
-    "axios": "^1.5.0",
-    "canvas": "^3.0.1",
     "dotenv": "^16.3.1",
-    "pdftoimg-js": "^0.0.2",
-    "weaviate-client": "^3.3.0"
+    "pdf-to-png-converter": "^3.6.4",
+    "weaviate-client": "^3.3.4"
   }
 }

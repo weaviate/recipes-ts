@@ -1,5 +1,5 @@
 import weaviate, { WeaviateClient, configure } from 'weaviate-client'
-import PdfToImg from "pdftoimg-js";
+import { pdfToPng } from 'pdf-to-png-converter'
 import * as fs from  'fs'
 import path from 'path'
 import 'dotenv/config'
@@ -14,7 +14,7 @@ async function main() {
   const client: WeaviateClient = await weaviate.connectToWeaviateCloud(weaviateURL, {
     authCredentials: new weaviate.ApiKey(weaviateKey),
     headers: {  
-      'X-VoyagesAI-Api-Key': voyageaiKey,  // Replace with your inference API key
+      'X-VoyageAI-Api-Key': voyageaiKey,  // Replace with your inference API key
     }
   })
 
@@ -33,7 +33,6 @@ async function main() {
       {
         name: "pageImage",
         dataType: configure.dataType.BLOB
-
       }
       ],
       // Define your VoyageAI vectorizer 
@@ -47,15 +46,16 @@ async function main() {
 
       // Step 3: Fetch local PDF file
       const pdf = fs.readFileSync(path.join(__dirname, "animals.pdf"));
-      const image = await PdfToImg(pdf);
+      const pdfImages = await pdfToPng(pdf);
 
       let itemsToInsert: Object[] = []
 
-      for (var page of image) {
+      for (var page of pdfImages) {
         let pdfObject = {
-          pageNumber: image.indexOf(page),
-          pageImage: page.split(',')[1]
+          pageNumber: page.pageNumber,
+          pageImage: page.content.toString('base64'),
       }
+
       // Insert
       let objectToInsert = {
           properties: pdfObject,
@@ -66,8 +66,7 @@ async function main() {
       }
 
       // Step 4: Bulk insert downloaded data into the "PDFLibrary" collection
-      const rest =  await pdfLibraryCollection.data.insertMany(itemsToInsert)
-      console.log('import result', rest)
+      const res =  await pdfLibraryCollection.data.insertMany(itemsToInsert)
 
       console.log('Data Imported');
     } catch (e) {

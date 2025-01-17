@@ -7,7 +7,6 @@ async function main() {
     const weaviateKey = process.env.WEAVIATE_ADMIN_KEY as string
     const voyageaiKey = process.env.VOYAGEAI_API_KEY as string
 
-
     // Step 1: Connect to your Weaviate instance  
     const client: WeaviateClient = await weaviate.connectToWeaviateCloud(weaviateURL, {
         authCredentials: new weaviate.ApiKey(weaviateKey),
@@ -20,7 +19,7 @@ async function main() {
     const pdfLibraryCollection = client.collections.get('PDFLibrary');
     // Step 2: Make a semantic search query to the "PDFLibrary" with text as query input
 
-    const searchResults = await pdfLibraryCollection.query.nearText('Species of Concern', {
+    const searchResults = await pdfLibraryCollection.query.nearText('Bufo boreas', {
         // autoLimit: 1,
         returnProperties: ["pageImage", "pageNumber"],
         returnMetadata: ['distance'], // Return the distance of results from the query vector
