@@ -5,14 +5,10 @@ async function main() {
 
   const weaviateURL = process.env.WEAVIATE_URL as string
   const weaviateKey = process.env.WEAVIATE_ADMIN_KEY as string
-  const openaiKey = process.env.OPENAI_API_KEY as string
 
   // Step 1: Connect to your Weaviate instance  
   const client: WeaviateClient = await weaviate.connectToWeaviateCloud(weaviateURL, {
     authCredentials: new weaviate.ApiKey(weaviateKey),
-    headers: {
-      'X-OpenAI-Api-Key': openaiKey,  // Replace with your inference API key
-    }
   })
 
   // Uncomment the code below to delete the "Wikipedia" collection if it exists
@@ -23,8 +19,8 @@ async function main() {
     // Step 2: Create a collection with a vectorizer
     await client.collections.create({
       name: 'Wikipedia',
-      // Define your OpenAI vectorizer  
-      vectorizers: weaviate.configure.vectorizer.text2VecOpenAI({
+      // Define your Weaviate vectorizer  
+      vectorizers: weaviate.configure.vectorizer.text2VecWeaviate({
         sourceProperties: ['text', 'title']
       }),
     });

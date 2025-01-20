@@ -23,7 +23,7 @@ async function main() {
     // Step 2: Create a collection with a vectorizer
     await client.collections.create({
       name: 'Wikipedia',
-      // Define your OpenAI vectorizer  
+      // Define your Cohere vectorizer  
       vectorizers: weaviate.configure.vectorizer.text2VecOpenAI({
         sourceProperties: ['text', 'title']
       }),
