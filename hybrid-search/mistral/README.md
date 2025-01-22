@@ -1,6 +1,6 @@
 ## Welcome to our recipe 
 
-[Similarity Search](https://weaviate.io/blog/vector-search-explained) leverages various machine learning models to perform searches based on semantic similarity. In Weaviate, this is done with `query.nearText`, `query.nearObject` and `query.nearVector` operators.
+[Hybrid Search](https://weaviate.io/blog/hybrid-search-explained) merges semantic and keyword search results to deliver the best of both search methods. In Weaviate, this is done with `query.hybrid`.
 
 To run this, add your `MISTRAL_API_KEY` to your .env file. 
 

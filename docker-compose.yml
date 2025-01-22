@@ -9,9 +9,10 @@ services:
     - '8080'
     - --scheme
     - http
-    image: semitechnologies/weaviate:1.28.2
+    image: semitechnologies/weaviate:1.28.3
     ports:
     - 8080:8080
+    - 50051:50051
     volumes:
     - ./weaviate_data:/var/lib/weaviate
     restart: on-failure:0
@@ -37,6 +38,8 @@ services:
       AUTHORIZATION_ADMINLIST_READONLY_USERS: 'YOUR-WEAVIATE-API-KEY'
   ollama:
     image: ollama/ollama
+    ports:
+    - 11434:11434
   t2v-transformers:
     image: semitechnologies/transformers-inference:sentence-transformers-multi-qa-MiniLM-L6-cos-v1
     environment:

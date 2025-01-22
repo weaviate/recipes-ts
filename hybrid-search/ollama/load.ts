@@ -3,16 +3,10 @@ import 'dotenv/config'
 
 async function main() {
 
-  const weaviateURL = process.env.WEAVIATE_URL as string
-  const weaviateKey = process.env.WEAVIATE_ADMIN_KEY as string
-  const openaiKey = process.env.OPENAI_API_KEY as string
-
   // Step 1: Connect to your Weaviate instance  
-  const client: WeaviateClient = await weaviate.connectToWeaviateCloud(weaviateURL, {
-    authCredentials: new weaviate.ApiKey(weaviateKey),
-    headers: {
-      'X-OpenAI-Api-Key': openaiKey,  // Replace with your inference API key
-    }
+  const client: WeaviateClient = await weaviate.connectToLocal({
+    authCredentials: new weaviate.ApiKey('YOUR-WEAVIATE-API-KEY'),
+    timeout: {query: 60 }
   })
 
   // Uncomment the code below to delete the "Wikipedia" collection if it exists
@@ -23,10 +17,17 @@ async function main() {
     // Step 2: Create a collection with a vectorizer
     await client.collections.create({
       name: 'Wikipedia',
-      // Define your OpenAI vectorizer  
-      vectorizers: weaviate.configure.vectorizer.text2VecOpenAI({
-        sourceProperties: ['text', 'title']
-      }),
+      // Define your Ollama vectorizer  
+      vectorizers: [weaviate.configure.vectorizer.text2VecOllama({
+        name: 'title_vector',
+        sourceProperties: ['title'],
+        apiEndpoint: 'http://ollama:11434',  // If using Docker, use this to contact your local Ollama instance
+        model: 'snowflake-arctic-embed',
+      }),],
+      generative: weaviate.configure.generative.ollama({
+        apiEndpoint: 'http://ollama:11434',  // If using Docker, use this to contact your local Ollama instance
+        model: 'mistral',  // The model to use, e.g. 'deepseek-r1', 'phi3', or 'mistral', 'command-r-plus', 'gemma'
+      })
     });
 
     try {
@@ -38,7 +39,7 @@ async function main() {
       const wikipediaPages = await response.json();
 
       // Step 4: Bulk insert downloaded data into the "Wikipedia" collection
-      await wikipediaCollection.data.insertMany(wikipediaPages)
+      const test = await wikipediaCollection.data.insertMany(wikipediaPages)
 
       console.log('Data Imported! Hooray');
     } catch (e) {
