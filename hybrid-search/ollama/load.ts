@@ -21,11 +21,11 @@ async function main() {
       vectorizers: [weaviate.configure.vectorizer.text2VecOllama({
         name: 'title_vector',
         sourceProperties: ['title'],
-        apiEndpoint: 'http://ollama:11434',  // If using Docker, use this to contact your local Ollama instance
+        apiEndpoint: 'http://host.docker.internal:11434',  // If using Docker, use this to contact your local Ollama instance
         model: 'snowflake-arctic-embed',
       }),],
       generative: weaviate.configure.generative.ollama({
-        apiEndpoint: 'http://ollama:11434',  // If using Docker, use this to contact your local Ollama instance
+        apiEndpoint: 'http://host.docker.internal:11434',  // If using Docker, use this to contact your local Ollama instance
         model: 'mistral',  // The model to use, e.g. 'deepseek-r1', 'phi3', or 'mistral', 'command-r-plus', 'gemma'
       })
     });
@@ -39,9 +39,11 @@ async function main() {
       const wikipediaPages = await response.json();
 
       // Step 4: Bulk insert downloaded data into the "Wikipedia" collection
-      const test = await wikipediaCollection.data.insertMany(wikipediaPages)
+      await wikipediaCollection.data.insertMany(wikipediaPages)
 
       console.log('Data Imported! Hooray');
+
+      
     } catch (e) {
       console.error(e);
     }
