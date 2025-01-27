@@ -15,7 +15,6 @@ async function main() {
     })
 
     await client_tgt.collections.delete("MTWiki")
-    await client_tgt.collections.delete("MTJeopardy")
 
     await client_tgt.collections.create({
         name: "MTWiki",
@@ -64,7 +63,6 @@ async function main() {
                 }
                 // Insert
                 console.log(`Successfully imported batch of ${itemsToInsert.length} items`);
-                console.log("seconds",response.elapsedSeconds)
                 itemsToInsert = [];
             } catch (error) {
                 console.error('Error importing batch:', error);

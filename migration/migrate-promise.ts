@@ -15,9 +15,8 @@ async function main() {
   })
 
   await client_tgt.collections.delete("MTWiki")
-  await client_tgt.collections.delete("MTJeopardy")
 
-  let reviews = await client_tgt.collections.create({
+  await client_tgt.collections.create({
     name: "MTWiki",
     multiTenancy: {
       enabled: false
@@ -62,7 +61,6 @@ async function main() {
         .then((response) => {
 
           console.log(`Successfully imported batch of ${Object.keys(response.uuids).length} items`);
-          console.log("seconds",response.elapsedSeconds)
           if (response.hasErrors) {
             console.log("this the error", response.errors)
             throw new Error("Error in batch import!");
