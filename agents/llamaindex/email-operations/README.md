@@ -1,6 +1,6 @@
 ## Welcome to our recipe
 
-This recipe is a Agent/[Agent RAG](https://weaviate.io/blog/what-is-agentic-rag) implementation that uses [LlamaIndex](https://ts.llamaindex.ai/), [Resend](https://resend.com/), [OpenAI](https://openai.com/) and [Weaviate](https://weaviate.io/) to search a Weaviate collection of Wikipedia posts for a topic of your choosing and then send a email to a user on the topic. 
+This recipe is an Agent/[Agentic RAG](https://weaviate.io/blog/what-is-agentic-rag) implementation that uses [LlamaIndex](https://ts.llamaindex.ai/), [Resend](https://resend.com/), [OpenAI](https://openai.com/) and [Weaviate](https://weaviate.io/) to search a Weaviate collection of Wikipedia posts for a topic of your choosing and then send an email to a user on the topic. 
 
 To run this, add your `OPENAI_API_KEY`, `RESEND_API_KEY` to your .env file. 
 
