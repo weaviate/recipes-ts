@@ -2,6 +2,7 @@
   "name": "recipes-js",
   "version": "1.0.0",
   "description": "a repository of weaviate recipes",
+  "type": "module",
   "scripts": {
     "start": "npx tsx index.ts"
   },
@@ -14,7 +15,9 @@
   },
   "dependencies": {
     "dotenv": "^16.3.1",
+    "llamaindex": "^0.8.31",
     "pdf-to-png-converter": "^3.6.4",
+    "resend": "^4.1.2",
     "weaviate-client": "^3.3.4"
   }
 }

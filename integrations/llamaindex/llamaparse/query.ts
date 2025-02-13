@@ -15,11 +15,11 @@ async function main() {
         }
     })
 
-    const myCollection = client.collections.get('Wikipedia');
+    const myCollection = client.collections.get('PDFStore');
 
     // Step 2: Make a generative search with a single prompt
-    const genResult = await myCollection.generate.nearText('women in the olympics', {
-      singlePrompt: "Write a haiku about {text} that includes at least a word from {title}",
+    const genResult = await myCollection.generate.nearText('what animal facts can you share?', {
+      singlePrompt: "Write a haiku about {chunk}",
     })
   
     for (const item of genResult.objects) {
@@ -27,8 +27,8 @@ async function main() {
     }
   
     // Step 3: Make a generative search with a grouped task
-    const groupedGenResult = await myCollection.generate.nearText('women in the olympics', {
-      groupedTask: "Summarize all the results received in 100 words",
+    const groupedGenResult = await myCollection.generate.nearText('santa clause', {
+      groupedTask: "What do Canada and Santa have in common?",
     })
   
     console.log("Grouped generated concept:", groupedGenResult.generated);
