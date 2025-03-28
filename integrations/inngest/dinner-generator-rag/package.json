@@ -1,0 +1,25 @@
+{
+  "scripts": {
+    "load": "ts-node scripts/load.ts",
+    "generate-jsons": "ts-node scripts/generate-jsons.ts",
+    "start": "ts-node-dev --respawn --transpile-only src/server.ts",
+    "inngest": "npx inngest-cli@latest dev"
+  },
+  "dependencies": {
+    "@dsnp/parquetjs": "^1.8.5",
+    "@types/express": "^5.0.0",
+    "dotenv": "^16.3.1",
+    "express": "^4.21.1",
+    "glob": "^11.0.0",
+    "inngest": "^3.26.3",
+    "openai": "^4.28.0",
+    "weaviate-client": "^3.2.3",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "ts-node": "^10.9.1",
+    "ts-node-dev": "^2.0.0",
+    "typescript": "^5.0.0"
+  }
+}
