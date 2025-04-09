@@ -34,7 +34,7 @@ async function main() {
         });
 
         try {
-            let pdfStoreCollection = client.collections.get('PDFStore');
+            let pdfStoreCollection = client.collections.use('PDFStore');
 
             // Step 3: Fetch local PDF file
             const __filename = fileURLToPath(import.meta.url); 

@@ -15,7 +15,7 @@ async function main() {
         }
     })
 
-    const myCollection = client.collections.get('PDFStore');
+    const myCollection = client.collections.use('PDFStore');
 
     // Step 2: Make a generative search with a single prompt
     const genResult = await myCollection.generate.nearText('what animal facts can you share?', {
@@ -23,7 +23,7 @@ async function main() {
     })
   
     for (const item of genResult.objects) {
-      console.log("Single generated concept:", item.generated);
+      console.log("Single generated concept:", item.generative?.text);
     }
   
     // Step 3: Make a generative search with a grouped task
@@ -31,7 +31,7 @@ async function main() {
       groupedTask: "What do Canada and Santa have in common?",
     })
   
-    console.log("Grouped generated concept:", groupedGenResult.generated);
+    console.log("Grouped generated concept:", groupedGenResult.generative?.text);
   
     await client.close()
 }

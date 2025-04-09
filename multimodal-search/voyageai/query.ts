@@ -16,7 +16,7 @@ async function main() {
         }
     })
 
-    const pdfLibraryCollection = client.collections.get('PDFLibrary');
+    const pdfLibraryCollection = client.collections.use('PDFLibrary');
     // Step 2: Make a semantic search query to the "PDFLibrary" with text as query input
 
     const searchResults = await pdfLibraryCollection.query.nearText('Bufo boreas', {

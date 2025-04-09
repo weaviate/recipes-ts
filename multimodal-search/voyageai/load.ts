@@ -42,7 +42,7 @@ async function main() {
     });
 
     try {
-      let pdfLibraryCollection = client.collections.get('PDFLibrary');
+      let pdfLibraryCollection = client.collections.use('PDFLibrary');
 
       // Step 3: Fetch local PDF file
       const pdf = fs.readFileSync(path.join(__dirname, "animals.pdf"));

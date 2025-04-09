@@ -23,8 +23,8 @@ async function main() {
     },
   })
 
-  let wiki_src = client_src.collections.get("Wiki")
-  let wiki_tgt = client_tgt.collections.get("MTWiki")
+  let wiki_src = client_src.collections.use("Wiki")
+  let wiki_tgt = client_tgt.collections.use("MTWiki")
 
   console.time('myConcurrentTimer');
   // let maxItems = await wiki_src.length()

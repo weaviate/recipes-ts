@@ -34,7 +34,7 @@ async function main() {
     }
 
     const dataRetriever = async ({ searchTerm } : { searchTerm: string }) => {
-        const wikiCollection = client.collections.get("Wikipedia")
+        const wikiCollection = client.collections.use("Wikipedia")
 
         const response = await wikiCollection.query.nearText(searchTerm,
             { limit: 4 })

@@ -15,7 +15,7 @@ async function main() {
         }
     })
 
-    const wikipediaCollection = client.collections.get('Wikipedia');
+    const wikipediaCollection = client.collections.use('Wikipedia');
     // Step 2: Make a semantic search query to the "Wikipedia" with text as query input
 
     const searchResults = await wikipediaCollection.query.nearText('women in the olympics', {

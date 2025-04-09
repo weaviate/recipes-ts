@@ -37,7 +37,7 @@ async function main() {
     });
 
     try {
-      let wikipediaCollection = client.collections.get('Wikipedia');
+      let wikipediaCollection = client.collections.use('Wikipedia');
 
       // Step 3: Download data to import into the "Wikipedia" collection
       const url = 'https://raw.githubusercontent.com/weaviate/weaviate-examples/main/wikipedia-small-dataset/wiki-10.json'

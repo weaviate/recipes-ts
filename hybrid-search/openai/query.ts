@@ -15,7 +15,7 @@ async function main() {
         }
     })
 
-    const wikipediaCollection = client.collections.get('Wikipedia');
+    const wikipediaCollection = client.collections.use('Wikipedia');
      // Step 2: Make a Hybrid search query to the "Wikipedia" with text as query input
      const searchResults = await wikipediaCollection.query.hybrid('women in the olympics', {
         limit: 3,

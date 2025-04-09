@@ -24,8 +24,8 @@ async function main() {
         // Additional settings not shown
     })
 
-    let wiki_src = client_src.collections.get("Wiki")
-    let wiki_tgt = client_tgt.collections.get("MTWiki")
+    let wiki_src = client_src.collections.use("Wiki")
+    let wiki_tgt = client_tgt.collections.use("MTWiki")
 
     console.time('mySerialTimer');
     // let maxItems = await wiki_src.length()
