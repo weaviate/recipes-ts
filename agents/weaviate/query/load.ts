@@ -1,5 +1,4 @@
 import weaviate, { WeaviateClient, vectorizer, dataType, configure } from 'weaviate-client';
-import { QueryAgent } from 'weaviate-agents';
 import "dotenv/config";
 
 interface DatasetItem {
@@ -22,7 +21,6 @@ async function main() {
     // Populate Weaviate with data
     await populateWeaviate(client);
 
-
     // Close client connection
     await client.close();
 }
@@ -37,7 +35,6 @@ async function populateWeaviate(client: WeaviateClient, overwriteExisting: boole
             await client.collections.delete('Weather');
             await client.collections.delete('FinancialContracts');
         } catch (error) {
-            // Collections may not exist, continue
         }
     }
 
@@ -58,57 +55,25 @@ async function populateWeaviate(client: WeaviateClient, overwriteExisting: boole
                     vectorIndexConfig: configure.vectorIndex.hnsw()
                 })
             ],
-            properties: [{ name: 'collection', dataType: dataType.TEXT },
-                {
-                    name: 'category',
-                    dataType: dataType.TEXT,
-                    description: 'The category to which the clothing item belongs'
-                },
-                {
-                    name: 'tags',
-                    dataType: dataType.TEXT_ARRAY,
-                    description: 'The tags that are associated with the clothing item'
-                },
-                {
-                    name: 'subcategory',
-                    dataType: dataType.TEXT
-                },
-                {
-                    name: 'name',
-                    dataType: dataType.TEXT
-                },
-                {
-                    name: 'description',
-                    dataType: dataType.TEXT,
-                    description: 'A detailed description of the clothing item'
-                },
-                {
-                    name: 'brand',
-                    dataType: dataType.TEXT,
-                    description: 'The brand of the clothing item'
-                },
-                {
-                    name: 'product_id',
-                    dataType: dataType.UUID
-                },
-                {
-                    name: 'colors',
-                    dataType: dataType.TEXT_ARRAY,
-                    description: 'The colors on the clothing item'
-                },
-                {
-                    name: 'reviews',
-                    dataType: dataType.TEXT_ARRAY
-                },
-                {
-                    name: 'image_url',
-                    dataType: dataType.TEXT
-                },
-                {
-                    name: 'price',
-                    dataType: dataType.NUMBER,
-                    description: 'The price of the clothing item in USD'
-                }
+            properties: [
+                { name: 'collection', dataType: dataType.TEXT },
+                { name: 'category', dataType: dataType.TEXT,
+                    description: 'The category to which the clothing item belongs' },
+                { name: 'tags', dataType: dataType.TEXT_ARRAY,
+                    description: 'The tags that are associated with the clothing item' },
+                { name: 'subcategory',dataType: dataType.TEXT },
+                { name: 'name', dataType: dataType.TEXT },
+                { name: 'description', dataType: dataType.TEXT,
+                    description: 'A detailed description of the clothing item' },
+                { name: 'brand', dataType: dataType.TEXT,
+                    description: 'The brand of the clothing item' },
+                { name: 'product_id',dataType: dataType.UUID },
+                { name: 'colors', dataType: dataType.TEXT_ARRAY,
+                    description: 'The colors on the clothing item' },
+                { name: 'reviews', dataType: dataType.TEXT_ARRAY },
+                { name: 'image_url', dataType: dataType.TEXT },
+                { name: 'price', dataType: dataType.NUMBER,
+                    description: 'The price of the clothing item in USD' }
             ]
         });
     }
@@ -119,32 +84,15 @@ async function populateWeaviate(client: WeaviateClient, overwriteExisting: boole
             name: 'Weather',
             description: 'Daily weather information including temperature, wind speed, precipitation, pressure etc.',
             vectorizers: vectorizer.text2VecWeaviate(),
-            properties: [{ name: 'date', dataType: dataType.DATE },
-                {
-                    name: 'humidity',
-                    dataType: dataType.NUMBER
-                },
-                {
-                    name: 'precipitation',
-                    dataType: dataType.NUMBER
-                },
-                {
-                    name: 'wind_speed',
-                    dataType: dataType.NUMBER
-                },
-                {
-                    name: 'visibility',
-                    dataType: dataType.NUMBER
-                },
-                {
-                    name: 'pressure',
-                    dataType: dataType.NUMBER
-                },
-                {
-                    name: 'temperature',
-                    dataType: dataType.NUMBER,
-                    description: 'temperature value in Celsius'
-                }
+            properties: [
+                { name: 'date', dataType: dataType.DATE },
+                { name: 'humidity',dataType: dataType.NUMBER },
+                { name: 'precipitation',dataType: dataType.NUMBER },
+                { name: 'wind_speed',dataType: dataType.NUMBER },
+                { name: 'visibility',dataType: dataType.NUMBER },
+                { name: 'pressure', dataType: dataType.NUMBER},
+                { name: 'temperature', dataType: dataType.NUMBER,
+                    description: 'temperature value in Celsius' }
             ]
         });
     }
