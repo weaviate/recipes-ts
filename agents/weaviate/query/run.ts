@@ -1,0 +1,80 @@
+import weaviate, { WeaviateClient, vectorizer, dataType, configure } from 'weaviate-client';
+import { QueryAgent } from 'weaviate-agents';
+import "dotenv/config";
+
+    async function main() {
+      // Initialize Weaviate client
+      const headers: Record<string, string> = {
+        'X-Cohere-API-Key': process.env.COHERE_API_KEY || '',
+        'X-OpenAI-API-Key': process.env.OPENAI_API_KEY || '',
+      };
+    
+      const client = await weaviate.connectToWeaviateCloud(process.env.WEAVIATE_URL as string, {
+        authCredentials: new weaviate.ApiKey(process.env.WEAVIATE_ADMIN_KEY as string),
+        headers
+      });
+    
+      // Instantiate Query Agent
+      const qa = new QueryAgent(
+        client,{
+        collections: ['ECommerce', 'FinancialContracts', 'Weather'] }
+      );
+    
+      // Query Agent with Collection Configuration
+      const qaWithConfig = new QueryAgent(client,{
+        collections: [{
+            name: 'ECommerce',
+            targetVector: ['name_description_brand_vector'],
+            viewProperties: ['description']
+            // tenant: 'tenantA' // Optional for multi-tenancy
+          },{ 
+            name: 'FinancialContracts' 
+        },{ 
+            name: 'Weather' 
+        }]
+      });
+    
+      // Basic Collection Selection Query
+      const contractResponse = await qa.run(
+        "What kinds of contracts are listed? What's the most common type of contract?",
+        { collections: ['FinancialContracts'] }
+      );
+    
+      contractResponse.display();
+    
+      // Query with Collection Configuration
+      const clothingResponse = await qaWithConfig.run(
+        "I like vintage clothes and nice shoes. Recommend some of each below $60.",{
+          collections: [{
+              name: 'ECommerce',
+              targetVector: ['name_description_brand_vector'],
+              viewProperties: ['name', 'description', 'category', 'brand']
+            },{
+              name: 'FinancialContracts'
+            }
+          ]
+        });
+    
+      clothingResponse.display();
+    
+      // Basic Query
+      const basicResponse = await qaWithConfig.run(
+        "I like vintage clothes and nice shoes. Recommend some of each below $60."
+      );
+    
+      basicResponse.display();
+    
+      // Follow-up Query
+      const followUpResponse = await qaWithConfig.run(
+        "I like the vintage clothes options, can you do the same again but above $200?",
+        { context: basicResponse }
+      );
+    
+      followUpResponse.display();
+    
+      // Close client connection
+      await client.close();
+    }
+    
+    // Run the main function
+    void main();

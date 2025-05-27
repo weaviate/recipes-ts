@@ -42,6 +42,8 @@ async function main() {
         return JSON.stringify({ response })
     }
 
+    
+
     // Step 3: Initialize your Language Model 
     Settings.llm = new OpenAI({
         apiKey: process.env.OPENAI_API_KEY,
@@ -83,7 +85,7 @@ async function main() {
     })
 
     
-    const tools = [dataRetrieverTool, emailTool ];
+    const tools = [dataRetrieverTool, emailTool];
 
     // Step 6: Make your tools available to your Language Model
     const agent = new OpenAIAgent({ tools });
