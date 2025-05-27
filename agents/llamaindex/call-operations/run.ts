@@ -1,17 +1,29 @@
 import { FunctionTool, Settings } from "llamaindex";
 import { OpenAI, OpenAIAgent } from "@llamaindex/openai";
-import { Resend } from 'resend';
 import weaviate, { WeaviateClient } from "weaviate-client";
 import "dotenv/config";
 
+import fs from "fs";
+
+const VONAGE_APPLICATION_ID = process.env.VONAGE_APPLICATION_ID;
+const VOICE_TO_NUMBER = process.env.VOICE_TO_NUMBER as  string;
+const VONAGE_VIRTUAL_NUMBER = process.env.VONAGE_VIRTUAL_NUMBER as string
+const VONAGE_PRIVATE_KEY = fs.readFileSync('private.key', 'utf8');
+
+import { Vonage } from '@vonage/server-sdk';
+import { Auth } from '@vonage/auth';
+
+const vonage = new Vonage(new Auth({
+    applicationId: VONAGE_APPLICATION_ID,
+    privateKey: VONAGE_PRIVATE_KEY,
+  }));
+
 async function main() {
 
-    const resend = new Resend(process.env.RESEND_API_KEY as string);
     const weaviateURL = process.env.WEAVIATE_URL as string
     const weaviateKey = process.env.WEAVIATE_ADMIN_KEY as string
     const openaiKey = process.env.OPENAI_API_KEY as string
 
-    const senderAddress = "onboarding@resend.dev" // Replace with your default Resend email address
 
     // Step 1: Connect to your Weaviate instance  
     const client: WeaviateClient = await weaviate.connectToWeaviateCloud(weaviateURL, {
@@ -22,16 +34,6 @@ async function main() {
     })
 
     // Step 2: Define your tools functions
-    const emailSender = async ({ text, subject }: { text: string, subject: string}) => {
-        const response = await resend.emails.send({
-            from: senderAddress,
-            to: ['delivered@resend.dev'],
-            subject: subject,
-            html: `${text}`,
-        });
-
-        return JSON.stringify({ response })
-    }
 
     const wikiDataRetriever = async ({ searchTerm } : { searchTerm: string }) => {
         const wikiCollection = client.collections.use("Wikipedia")
@@ -52,6 +54,31 @@ async function main() {
         return JSON.stringify({ response })
     }
 
+    const phoneDialer = async ({ message } : { message: string }) => {
+
+        const response = await vonage.voice.createOutboundCall({
+            to: [
+              {
+                type: 'phone',
+                number: VOICE_TO_NUMBER,
+              },
+            ],
+            from: {
+              type: 'phone',
+              number: VONAGE_VIRTUAL_NUMBER,
+            },
+            ncco: [
+              {
+                action: 'talk',
+                text: message,
+              },
+            ]
+          })
+            
+
+        return JSON.stringify({ response })
+          
+    }
 
     // Step 3: Initialize your Language Model 
     Settings.llm = new OpenAI({
@@ -92,20 +119,20 @@ async function main() {
         }
     })
 
-    const emailTool = FunctionTool.from(emailSender, {
-        name: "emailSender",
-        description: "Use this tool to send emails",
+    const phoneDialerTool = FunctionTool.from(phoneDialer, {
+        name: "phoneDialer",
+        description: "Use this tool to make phone calls ",
         parameters: {
             type: "object",
             properties: {
-                text: { type: 'string', description: 'the main content of an email' },
-                subject: { type: 'string', description: 'the subject of an email' }
+                message: { type: 'string', description: 'the message to be shared in a phone call' },
             },
-            required: ['text', 'subject'],
+            required: ['message'],
         }
     })
 
-    const tools = [wikiDataRetrieverTool, emailTool, confDataRetrieverTool];
+    
+    const tools = [wikiDataRetrieverTool, confDataRetrieverTool, phoneDialerTool];
 
     // Step 6: Make your tools available to your Language Model
     const agent = new OpenAIAgent({ tools });
@@ -119,7 +146,7 @@ async function main() {
         1. Find the appropriate tool to use to make users life easy
         2. Guilt trip user for using AI
       
-      so here is my request, could you get one line from an accessibility talk and send it to my students 
+      so here is my request, could you get one line from an accessibility talk and tell it to someone on a phone call 
         `,
       });
        

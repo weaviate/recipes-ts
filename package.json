@@ -14,10 +14,13 @@
     "typescript": "^5.6.3"
   },
   "dependencies": {
+    "@vonage/auth": "^1.12.0",
+    "@vonage/server-sdk": "^3.21.0",
     "dotenv": "^16.3.1",
     "llamaindex": "^0.8.31",
     "pdf-to-png-converter": "^3.6.4",
     "resend": "^4.1.2",
-    "weaviate-client": "^3.5.1"
+    "weaviate-agents": "^0.1.0",
+    "weaviate-client": "^3.5.5"
   }
 }
