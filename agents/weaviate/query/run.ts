@@ -14,12 +14,6 @@ import "dotenv/config";
         headers
       });
     
-      // Instantiate Query Agent
-      const qa = new QueryAgent(
-        client,{
-        collections: ['ECommerce', 'FinancialContracts', 'Weather'] }
-      );
-    
       // Query Agent with Collection Configuration
       const qaWithConfig = new QueryAgent(client,{
         collections: [{
@@ -34,13 +28,6 @@ import "dotenv/config";
         }]
       });
     
-      // Basic Collection Selection Query
-      const contractResponse = await qa.run(
-        "What kinds of contracts are listed? What's the most common type of contract?",
-        { collections: ['FinancialContracts'] }
-      );
-    
-      contractResponse.display();
     
       // Query with Collection Configuration
       const clothingResponse = await qaWithConfig.run(
