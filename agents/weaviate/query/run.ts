@@ -1,4 +1,4 @@
-import weaviate, { WeaviateClient, vectorizer, dataType, configure } from 'weaviate-client';
+import weaviate from 'weaviate-client';
 import { QueryAgent } from 'weaviate-agents';
 import "dotenv/config";
 
