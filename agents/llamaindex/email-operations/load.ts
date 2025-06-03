@@ -5,14 +5,10 @@ async function main() {
 
   const weaviateURL = process.env.WEAVIATE_URL as string
   const weaviateKey = process.env.WEAVIATE_ADMIN_KEY as string
-  const openaiKey = process.env.OPENAI_API_KEY as string
 
   // Step 1: Connect to your Weaviate instance  
   const client: WeaviateClient = await weaviate.connectToWeaviateCloud(weaviateURL, {
     authCredentials: new weaviate.ApiKey(weaviateKey),
-    headers: {
-      'X-OpenAI-Api-Key': openaiKey,  // Replace with your inference API key
-    }
   })
 
   // Delete the "Wikipedia" collection if it exists
@@ -24,16 +20,13 @@ async function main() {
     await client.collections.create({
       name: 'Wikipedia',
       // Define your OpenAI vectorizer and generative model  
-      vectorizers: weaviate.configure.vectorizer.text2VecOpenAI({
+      vectorizers: weaviate.configure.vectorizer.text2VecWeaviate({
         sourceProperties: ['title','text']
       }),
-      properties: [
-        { 
-          name: "name",
-          dataType: weaviate.configure.dataType.TEXT,
-        },
-      ],
-      generative: weaviate.configure.generative.openAI()
+
+      generative: weaviate.configure.generative.openAI({
+        model: 'gpt-4o'
+      })
     });
 
     try {
@@ -41,13 +34,13 @@ async function main() {
 
       // Step 3: Download data to import into the "Wikipedia" collection
       const url = 'https://raw.githubusercontent.com/weaviate/weaviate-examples/main/wikipedia-small-dataset/wiki-10.json'
-      const response = await fetch(url);
-      const wikipediaPages = await response.json();
+      const wiki_data = await fetch(url);
+      const wikipediaPages = await wiki_data.json();
 
       // Step 4: Bulk insert downloaded data into the "Wikipedia" collection
-      let response2 = await wikipediaCollection.data.insertMany(wikipediaPages)
+      let response = await wikipediaCollection.data.insertMany(wikipediaPages)
 
-      console.log('Data Imported', response2);
+      console.log('Data Imported', response);
     } catch (e) {
       console.error(e);
     }

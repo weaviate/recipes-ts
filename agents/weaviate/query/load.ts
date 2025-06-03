@@ -8,14 +8,8 @@ interface DatasetItem {
 
 async function main() {
     // Initialize Weaviate client
-    const headers: Record<string, string> = {
-        'X-Cohere-API-Key': process.env.COHERE_API_KEY || '',
-        'X-OpenAI-API-Key': process.env.OPENAI_API_KEY || '',
-    };
-
     const client = await weaviate.connectToWeaviateCloud(process.env.WEAVIATE_URL as string, {
         authCredentials: new weaviate.ApiKey(process.env.WEAVIATE_ADMIN_KEY as string),
-        headers
     });
 
     // Populate Weaviate with data
