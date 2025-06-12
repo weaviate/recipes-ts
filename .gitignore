@@ -2,5 +2,8 @@ node_modules/
 build/
 weaviate_data
 .env
+.env.workshop
+*/private.key
+private.key
 .DS_Store
 yarn.lock
