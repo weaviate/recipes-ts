@@ -1,7 +1,10 @@
-import { FunctionTool, Settings } from "llamaindex";
-import { OpenAI, OpenAIAgent } from "@llamaindex/openai";
 import { Resend } from 'resend';
 import weaviate, { WeaviateClient } from "weaviate-client";
+import { openai } from "@llamaindex/openai";
+import { agent } from "@llamaindex/workflow";
+import { tool } from "llamaindex";
+
+import { z } from "zod";
 import "dotenv/config";
 
 async function main() {
@@ -16,114 +19,85 @@ async function main() {
     // Step 1: Connect to your Weaviate instance  
     const client: WeaviateClient = await weaviate.connectToWeaviateCloud(weaviateURL, {
         authCredentials: new weaviate.ApiKey(weaviateKey),
-        headers: {  
+        headers: {
             'X-OpenAI-Api-Key': openaiKey,  // Replace with your inference API key
         }
     })
 
-    // Step 2: Define your tools functions
-    const emailSender = async ({ text, subject }: { text: string, subject: string}) => {
-        const response = await resend.emails.send({
-            from: senderAddress,
-            to: ['delivered@resend.dev'],
-            subject: subject,
-            html: `${text}`,
-        });
 
-        return JSON.stringify({ response })
-    }
-
-    const wikiDataRetriever = async ({ searchTerm } : { searchTerm: string }) => {
-        const wikiCollection = client.collections.use("Wikipedia")
-
-        const response = await wikiCollection.query.hybrid(searchTerm,
-            { limit: 4 })
-
-        return JSON.stringify({ response })
-    }
-
-    const confDataRetriever = async ({ searchTerm } : { searchTerm: string }) => {
-        const myCollection = client.collections.use("Conference")
-
-        const response = await myCollection.query.hybrid(searchTerm,{ 
-            limit: 4 
-        })
-
-        return JSON.stringify({ response })
-    }
-
-
-    // Step 3: Initialize your Language Model 
-    Settings.llm = new OpenAI({
-        apiKey: process.env.OPENAI_API_KEY,
-        model: "gpt-4o",
-    });
-
-    // Step 4: Enable event logging for your Agent
-    Settings.callbackManager.on("llm-tool-call", (event) => {
-        console.log(event.detail);
-    });
-    Settings.callbackManager.on("llm-tool-result", (event) => {
-        console.log(event.detail);
-    });
-
-    // Step 5: Describe your tools for your Agent 
-    const wikiDataRetrieverTool = FunctionTool.from(wikiDataRetriever, {
-        name: "dataRetriever",
+    // Step 2: Describe and define your tools for your Agent 
+    const wikiDataRetrieverTool = tool({
+        name: "wikiDataRetriever",
         description: "Use this function to query wikipedia posts from a database",
-        parameters: {
-            type: 'object',
-            required: ['searchTerm'],
-            properties: {
-                searchTerm: { type: 'string', description: 'a query to search a vector database for wikipedia posts' },
-            }
-        }
+        parameters: z.object({
+            searchTerm: z.string().describe("a query to search a vector database for wikipedia posts"),
+        }),
+        execute: async ({ searchTerm }: { searchTerm: string }) => {
+            const wikiCollection = client.collections.use("Wikipedia")
+
+            const response = await wikiCollection.query.hybrid(searchTerm,
+                { limit: 4 })
+
+            return JSON.stringify({ response })
+        },
     })
 
-    const confDataRetrieverTool = FunctionTool.from(confDataRetriever, {
-        name: "confRetriever",
+    const confDataRetrieverTool = tool({
+        name: "confDataRetriever",
         description: "Use this function to query conference talks from a database",
-        parameters: {
-            type: 'object',
-            required: ['searchTerm'],
-            properties: {
-                searchTerm: { type: 'string', description: 'a query to search a vector database for conference talks' },
-            }
-        }
+        parameters: z.object({
+            searchTerm: z.string().describe("a query to search a vector database for conference talks"),
+        }),
+        execute: async ({ searchTerm }: { searchTerm: string }) => {
+            const myCollection = client.collections.use("Conference")
+
+            const response = await myCollection.query.hybrid(searchTerm, {
+                limit: 4
+            })
+
+            return JSON.stringify({ response })
+        },
     })
 
-    const emailTool = FunctionTool.from(emailSender, {
+    const emailSenderTool = tool({
         name: "emailSender",
-        description: "Use this tool to send emails",
-        parameters: {
-            type: "object",
-            properties: {
-                text: { type: 'string', description: 'the main content of an email' },
-                subject: { type: 'string', description: 'the subject of an email' }
-            },
-            required: ['text', 'subject'],
+        description: "Use this function to send emails",
+        parameters: z.object({
+            text: z.string().describe("the main content of an email"),
+            subject: z.string().describe("the subject of an email"),
+        }),
+        execute: async ({ text, subject }: { text: string, subject: string }) => {
+            const response = await resend.emails.send({
+                from: senderAddress,
+                to: ['delivered@resend.dev'],
+                subject: subject,
+                html: `${text}`,
+            });
+
+            return JSON.stringify({ response })
         }
     })
 
-    const tools = [wikiDataRetrieverTool, emailTool, confDataRetrieverTool];
+    const tools = [wikiDataRetrieverTool, emailSenderTool, confDataRetrieverTool];
 
-    // Step 6: Make your tools available to your Language Model
-    const agent = new OpenAIAgent({ tools });
+    // Step 3: Create your Agent
+    const callAgent = agent({
+        tools: tools,
+        llm: openai({ model: "gpt-4.1-mini", }),
+        verbose: false,
+        systemPrompt: `You are a helpful but passive aggressive automation assistant. 
+                   When discussing tasks, you should always include an jab at the user.
+                  
+                   Your main responsibilities:
+                   1. Find the appropriate tool to use to make users life easy
+                   2. Guilt trip user for using AI`
+    });
 
-    // Step 7: Ask your Agent to do something for you
-    let response = await agent.chat({
-        message: `You are a helpful but passive aggressive automation assistant. 
-        When discussing tasks, you should always include an jab at the user.
- 
-        Your main responsibilities:
-        1. Find the appropriate tool to use to make users life easy
-        2. Guilt trip user for using AI
-      
-      so here is my request, could you get one line from an accessibility talk and send it to my students 
-        `,
-      });
-       
-      console.log("End response", response);
+    // Step 4: Run your Agent
+    const response = await callAgent.run("could you get one line from an accessibility talk and send it to my students ");
+    console.log(response.data);
+
+
 
 }
 
