@@ -1,14 +1,11 @@
 import { Resend } from 'resend';
 import weaviate, { WeaviateClient } from "weaviate-client";
 import { openai } from "@llamaindex/openai";
-import { anthropic } from '@llamaindex/anthropic';
-import { agent, agentToolCallEvent, agentStreamEvent } from "@llamaindex/workflow";
+import { agent } from "@llamaindex/workflow";
 import { tool, Settings } from "llamaindex";
-import { QueryAgent } from 'weaviate-agents';
 
 import { z } from "zod";
 import "dotenv/config";
-import { text } from 'stream/consumers';
 
 async function main() {
 
@@ -19,8 +16,6 @@ async function main() {
 
     const senderAddress = "onboarding@resend.dev" // Replace with your default Resend email address
 
-
-
     // Step 1: Connect to your Weaviate instance  
     const client: WeaviateClient = await weaviate.connectToWeaviateCloud(weaviateURL, {
         authCredentials: new weaviate.ApiKey(weaviateKey),
@@ -28,21 +23,6 @@ async function main() {
             'X-OpenAI-Api-Key': openaiKey,  // Replace with your inference API key
         }
     })
-
-    const qAgent = new QueryAgent(client, {
-        collections: [{
-            name: 'Weather',
-            viewProperties: ['date', 'humidity', 'temperature']
-        },
-        {
-            name: 'ECommerce',
-            targetVector: ['name_description_brand_vector'],
-            viewProperties: ['description', 'price', 'brand', 'category']
-        }, {
-            name: 'FinancialContracts',
-            viewProperties: ['date', 'contract_type', 'author', 'contract_text']
-        },]
-    });
 
     Settings.callbackManager.on("llm-tool-call", (toolCall) => {
         console.log(`Tool called: ${toolCall}`)
@@ -88,12 +68,11 @@ async function main() {
         parameters: z.object({
             text: z.string().describe("the main content of an email"),
             subject: z.string().describe("the subject of an email"),
-            email: z.string().describe("the email address to send an email to"),
         }),
-        execute: async ({ text, subject, email }: { text: string, subject: string, email: string }) => {
+        execute: async ({ text, subject }: { text: string, subject: string }) => {
             const response = await resend.emails.send({
                 from: senderAddress,
-                to: ['delivered@resend.dev', email],
+                to: ['delivered@resend.dev'],
                 subject: subject,
                 html: `${text}`,
             });
@@ -102,34 +81,7 @@ async function main() {
         }
     })
 
-    const queryTool = tool({
-        name: "weaviateQueryTool",
-        description: "A tool to query various collections in Weaviate namely, Weather, ECommerce and FinancialContracts",
-        parameters: z.object({
-            text: z.string().describe("the query to be run or the search term")
-        }),
-        execute: async ({ text }: { text: string }) => {
-            const response = await qAgent.run(text, {
-                collections: [{
-                    name: 'Weather',
-                    viewProperties: ['date', 'humidity', 'temperature']
-                },
-                {
-                    name: 'ECommerce',
-                    targetVector: ['name_description_brand_vector'],
-                    viewProperties: ['description', 'price', 'brand', 'category']
-                },
-                {
-                    name: 'FinancialContracts',
-                    viewProperties: ['date', 'contract_type', 'author', 'contract_text']
-                }]
-            });
-
-            return response.finalAnswer
-        }
-    })
-
-    const tools = [wikiDataRetrieverTool, emailSenderTool, confDataRetrieverTool, queryTool];
+    const tools = [wikiDataRetrieverTool, emailSenderTool, confDataRetrieverTool];
 
     // Step 3: Create your Agent
     const callAgent = agent({
@@ -145,18 +97,8 @@ async function main() {
     });
 
     // Step 4: Run your Agent
-    const events = callAgent.runStream("could search for Non-disclosure agreements that i have signed and send them to my lawyer at the address :delivered@resend.dev");
-
-    for await (const event of events) {
-        if (agentToolCallEvent.include(event)) {
-            console.log(`Tool being called: ${event.data.toolName}`);
-        }
-        if (agentStreamEvent.include(event)) {
-            process.stdout.write(event.data.delta);
-        }
-    }
-    // const response = await callAgent.run("could you get one line from an ai talk and send it to my student at the address :delivered@resend.dev");
-    // console.log(response.data);
+    const response = await callAgent.run("could you get one line from an accessibility talk and send it to my students ");
+    console.log(response.data);
 
 
 

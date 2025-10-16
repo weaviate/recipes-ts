@@ -14,9 +14,9 @@
     "typescript": "^5.6.3"
   },
   "dependencies": {
-    "@llamaindex/anthropic": "^0.3.12",
+    "@llamaindex/anthropic": "^0.3.13",
     "@llamaindex/openai": "^0.4.4",
-    "@llamaindex/workflow": "^1.1.7",
+    "@llamaindex/workflow": "^1.1.10",
     "@vonage/auth": "^1.12.0",
     "@vonage/server-sdk": "^3.21.0",
     "dotenv": "^16.3.1",
@@ -24,7 +24,7 @@
     "pdf-to-png-converter": "^3.6.4",
     "resend": "^4.1.2",
     "tslib": "^2.8.1",
-    "weaviate-agents": "^0.1.0",
-    "weaviate-client": "^3.5.5"
+    "weaviate-agents": "^1.0.0",
+    "weaviate-client": "^3.9.0-rc.0"
   }
 }

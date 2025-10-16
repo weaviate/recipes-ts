@@ -23,7 +23,7 @@ async function main() {
     // Step 2: Create a collection with both a vectorizer and generative model
     await client.collections.create({
       name: 'Wikipedia',
-      // Define your Cohere vectorizer and generative model  
+      // Define your OpenAI vectorizer and generative model  
       vectorizers: weaviate.configure.vectorizer.text2VecOpenAI({
         sourceProperties: ['title','text']
       }),

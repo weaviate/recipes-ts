@@ -28,7 +28,7 @@ async function main() {
 // Run the main function
 void main();
 
-async function populateWeaviate(client: WeaviateClient, overwriteExisting: boolean = false): Promise<void> {
+async function populateWeaviate(client: WeaviateClient, overwriteExisting: boolean = true): Promise<void> {
     if (overwriteExisting) {
         try {
             await client.collections.delete('ECommerce');
@@ -70,7 +70,7 @@ async function populateWeaviate(client: WeaviateClient, overwriteExisting: boole
                 { name: 'product_id',dataType: dataType.UUID },
                 { name: 'colors', dataType: dataType.TEXT_ARRAY,
                     description: 'The colors on the clothing item' },
-                { name: 'reviews', dataType: dataType.TEXT_ARRAY },
+                { name: 'reviews', dataType: dataType.TEXT_ARRAY, description: 'Reviews of the clothing item from users who bought the item' },
                 { name: 'image_url', dataType: dataType.TEXT },
                 { name: 'price', dataType: dataType.NUMBER,
                     description: 'The price of the clothing item in USD' }
@@ -87,7 +87,8 @@ async function populateWeaviate(client: WeaviateClient, overwriteExisting: boole
             properties: [
                 { name: 'date', dataType: dataType.DATE },
                 { name: 'humidity',dataType: dataType.NUMBER },
-                { name: 'precipitation',dataType: dataType.NUMBER },
+                { name: 'precipitation',dataType: dataType.NUMBER,
+            description: 'precipitation (rain, freezing rain, sleet, snow, or hail) value in mm' },
                 { name: 'wind_speed',dataType: dataType.NUMBER },
                 { name: 'visibility',dataType: dataType.NUMBER },
                 { name: 'pressure', dataType: dataType.NUMBER},
@@ -102,7 +103,15 @@ async function populateWeaviate(client: WeaviateClient, overwriteExisting: boole
         await client.collections.create({
             name: 'FinancialContracts',
             description: 'A dataset of financial contracts between individuals and/or companies, as well as information on the type of contract and who has authored them.',
-            vectorizers: vectorizer.text2VecWeaviate()
+            vectorizers: vectorizer.text2VecWeaviate(),
+            properties: [
+                { name: 'date', dataType: dataType.DATE, description: 'The date the contract was signed' },
+                { name: 'contract_type', dataType: dataType.TEXT, description: 'The type of contract' },
+                {name: 'author', dataType: dataType.TEXT, "description": "The author of the contract"},
+                {name: 'contract_length', dataType: dataType.NUMBER, "description": "The length of the contract in years"},
+                {name: 'doc_id', dataType: dataType.NUMBER, "description": "The unique identifier of the contract"},
+                {name: 'contract_text', dataType: dataType.TEXT, "description": "The text of the contract"}
+            ]
         });
     }
 
