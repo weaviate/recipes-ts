@@ -24,7 +24,7 @@ async function main() {
     await client.collections.create({
       name: 'Wikipedia',
       // Define your Google vectorizer
-      vectorizers: weaviate.configure.vectorizer.text2VecGoogle({
+      vectorizers: weaviate.configure.vectors.text2VecGoogle({
         sourceProperties: ['title','text']
       }),
     });

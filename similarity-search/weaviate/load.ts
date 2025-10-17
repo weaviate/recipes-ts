@@ -20,7 +20,7 @@ async function main() {
     await client.collections.create({
       name: 'Wikipedia',
       // Define your Weaviate vectorizer  
-      vectorizers: weaviate.configure.vectorizer.text2VecWeaviate({
+      vectorizers: weaviate.configure.vectors.text2VecWeaviate({
         sourceProperties: ['text', 'title']
       }),
     });

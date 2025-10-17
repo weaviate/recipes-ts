@@ -36,7 +36,7 @@ async function main() {
       }
       ],
       // Define your VoyageAI vectorizer 
-      vectorizers: weaviate.configure.vectorizer.multi2VecVoyageAI({
+      vectorizers: weaviate.configure.vectors.multi2VecVoyageAI({
         imageFields: ["pageImage"],
       }),
     });

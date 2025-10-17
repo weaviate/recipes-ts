@@ -18,7 +18,7 @@ async function main() {
     await client.collections.create({
       name: 'Wikipedia',
       // Define your Ollama vectorizer  
-      vectorizers: [weaviate.configure.vectorizer.text2VecOllama({
+      vectorizers: [weaviate.configure.vectors.text2VecOllama({
         name: 'title_vector',
         sourceProperties: ['title'],
         apiEndpoint: 'http://host.docker.internal:11434',  // If using Docker, use this to contact your local Ollama instance

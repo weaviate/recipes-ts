@@ -24,7 +24,7 @@ async function main() {
     await client.collections.create({
       name: 'Wikipedia',
       // Define your Cohere vectorizer 
-      vectorizers: weaviate.configure.vectorizer.text2VecCohere({
+      vectorizers: weaviate.configure.vectors.text2VecCohere({
         sourceProperties: ['title', 'text']
       }),
     });

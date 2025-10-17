@@ -27,7 +27,7 @@ async function main() {
         await client.collections.create({
             name: 'PDFStore',
             // Define your OpenAI vectorizer and generative model  
-            vectorizers: weaviate.configure.vectorizer.text2VecOpenAI({
+            vectorizers: weaviate.configure.vectors.text2VecOpenAI({
                 sourceProperties: ['title', 'text']
             }),
             generative: weaviate.configure.generative.openAI()

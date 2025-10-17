@@ -24,7 +24,7 @@ async function main() {
     await client.collections.create({
       name: 'Wikipedia',
       // Define your Mistral vectorizer and generative model  
-      vectorizers: weaviate.configure.vectorizer.text2VecMistral({
+      vectorizers: weaviate.configure.vectors.text2VecMistral({
         sourceProperties: ['title','text']
       }),
       generative: weaviate.configure.generative.mistral()

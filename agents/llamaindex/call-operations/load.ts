@@ -24,7 +24,7 @@ async function main() {
     await client.collections.create({
       name: 'Conference',
       // Define your Weaviate vectorizer and OpenAI generative model  
-      vectorizers: weaviate.configure.vectorizer.text2VecWeaviate({
+      vectorizers: weaviate.configure.vectors.text2VecWeaviate({
         sourceProperties: ['title','track', 'description', 'speaker_bio'],
       }),
       generative: weaviate.configure.generative.openAI()

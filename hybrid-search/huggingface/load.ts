@@ -23,7 +23,7 @@ async function main() {
     await client.collections.create({
       name: 'Wikipedia',
       // Define your Huggingface vectorizer  
-      vectorizers: weaviate.configure.vectorizer.text2VecHuggingFace({
+      vectorizers: weaviate.configure.vectors.text2VecHuggingFace({
         model: "<hugging-face-model-name>",
         sourceProperties: ['title','text']
       }),

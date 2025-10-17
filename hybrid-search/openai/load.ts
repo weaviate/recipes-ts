@@ -24,7 +24,7 @@ async function main() {
     await client.collections.create({
       name: 'Wikipedia',
       // Define your OpenAI vectorizer  
-      vectorizers: weaviate.configure.vectorizer.text2VecOpenAI({
+      vectorizers: weaviate.configure.vectors.text2VecOpenAI({
         sourceProperties: ['text', 'title']
       }),
     });

@@ -2,6 +2,7 @@ node_modules/
 build/
 weaviate_data
 .env
+.env.test
 .env.workshop
 */private.key
 private.key

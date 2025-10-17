@@ -155,6 +155,8 @@ async function main() {
             process.stdout.write(event.data.delta);
         }
     }
+
+    // Example 
     // const response = await callAgent.run("could you get one line from an ai talk and send it to my student at the address :delivered@resend.dev");
     // console.log(response.data);
 
